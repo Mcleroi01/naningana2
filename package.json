@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "firebase-tools": "^13.16.0",
+    "global": "^4.4.0"
+  }
+}

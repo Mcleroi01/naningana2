@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "317333936121",
+    "project_id": "flutter-naningana",
+    "storage_bucket": "flutter-naningana.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:317333936121:android:5a4a827d411c5d9253cf28",
+        "android_client_info": {
+          "package_name": "com.example.naningana"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "317333936121-ksv11ts1rd6a4fqp5qdgdlhmdga1la8d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAG3tY1n9jHR37pGCAF7v0IFcXMqiZFIAk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "317333936121-ksv11ts1rd6a4fqp5qdgdlhmdga1la8d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "317333936121-6bp99rat5645vs60admh31b7e5timg69.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.naningana"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

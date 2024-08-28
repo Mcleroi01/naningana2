@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:naningana/intro/IntroPage.dart';
+import 'package:naningana/intro/homePage.dart';
 import 'package:naningana/pages/auth/loginOrRegister.dart';
 
 class AuthPage extends StatelessWidget {
@@ -13,7 +13,7 @@ class AuthPage extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot){
           if(snapshot.hasData)
-          {return IntroPage();
+          {return HomePage();
           }
           else{
             return LoginOrRegister();

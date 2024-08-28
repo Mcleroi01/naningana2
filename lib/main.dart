@@ -11,6 +11,7 @@ import 'package:naningana/theme/darkMode.dart';
 import 'package:naningana/theme/lightMode.dart';
 
 import 'firebase_options.dart';
+import 'intro/homePage.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
       home: AuthPage(),
       routes: {
         '/login_register': (context)=>LoginOrRegister(),
-        '/intro_page': (context)=>IntroPage(),
+        '/home_page': (context)=>HomePage(),
         '/profile_page': (context)=>ProfilPage(),
         '/users_page': (context)=>UsersPage(),
       },

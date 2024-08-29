@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
           color: Colors.black12,
           image: DecorationImage(
             image: NetworkImage(
-                'https://img.freepik.com/free-vector/snake-ladders-game-template-farm-theme_1308-89464.jpg'),
+                'https://www.shutterstock.com/image-vector/blue-spiral-background-vector-illustration-600nw-2473473495.jpg'),
             fit: BoxFit.cover,
           ),
         ),

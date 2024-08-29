@@ -24,6 +24,9 @@ class _IntroPageState extends State<IntroPage> {
   Timer? _instructionTimer;
   int _instructionTimeLeft = 0;
 
+  // Add this line
+  List<int> _highlightedBlocks = [];
+
   @override
   void initState() {
     super.initState();
@@ -36,85 +39,75 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void dispose() {
     _globalTimer?.cancel();
-    _instructionTimer?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
 
-  // Generate instructions with specific color patterns
   void _generateInstructions() {
-    _instructions.clear(); // Clear any previous instructions
+    _instructions.clear(); // Effacer les instructions précédentes
 
-    // Define fixed color patterns
+    // Définir les motifs de couleur fixes
     final List<List<Color>> colorPatterns = [
-      [
-        Colors.yellow,
-        Colors.red,
-        Colors.blue,
-        Colors.yellow,
-        Colors.red,
-        Colors.blue
-      ],
-      [
-        Colors.blue,
-        Colors.yellow,
-        Colors.red,
-        Colors.blue,
-        Colors.yellow,
-        Colors.red
-      ],
-      [
-        Colors.red,
-        Colors.blue,
-        Colors.yellow,
-        Colors.red,
-        Colors.blue,
-        Colors.yellow
-      ]
+      [Colors.red, Colors.blue, Colors.yellow, Colors.red, Colors.blue, Colors.yellow],
+      [Colors.blue, Colors.yellow, Colors.red, Colors.blue, Colors.yellow, Colors.red],
+      [Colors.yellow, Colors.red, Colors.blue, Colors.yellow, Colors.red, Colors.blue],
+
     ];
 
-    // Define the instructions for each block
-    final List<String> instructions = [
-      "PA: Je pose mon pied gauche sur le rouge en dansant.",
-      "AD: Je pose mon pied droit sur le jaune en dansant.",
-      "AD: Je pose mon 2e pied sur la couleur à côté et je danse en balançant les bras.",
-      "AD: Je pose mon 2e pied sur la couleur à côté et je danse en balançant les bras.",
-      "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.",
-      "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.",
-      "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras.",
-      "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras.",
-      "AD: J'avance sur le rectangle en face.",
-      "AD: J'avance sur le rectangle en face.",
-      "PA et AD: J'avance sur la couleur occupée à la 3e ligne et je reprends tous les gestes.",
-      "AD: J'avance sur la couleur occupée à la 3e ligne et je reprends tous les gestes.",
-      "PA  AD: Je regarde mon compagnon et lui dis : 'Grâce à toi, je vis heureux et en paix,' puis nous avançons sur l'étoile et nous nous faisons un câlin.",
-      "AD: Je regarde mon compagnon et lui dis : 'Grâce à toi, je vis heureux et en paix,' puis nous avançons sur l'étoile et nous nous faisons un câlin.",
-      " AD:  puis nous avançons sur l'étoile et nous nous faisons un câlin.",
-      "PA  AD:  puis nous avançons sur l'étoile et nous nous faisons un câlin.",
+    // Définir les instructions pour chaque bloc
+    final List<Map<String, dynamic>> instructions = [
+      {"bloc": 13, "color": Colors.red, "instruction": "PA: Je pose mon pied gauche sur le rouge en dansant", "highlight": [13]},
+      {"bloc": 18, "color": Colors.yellow, "instruction": "AD: Je pose mon pied droit sur le jaune en dansant  ", "highlight": [18]},
+      {"bloc": 14, "color": Colors.red, "instruction": "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.", "highlight": [14]},
+      {"bloc": 17, "color": Colors.yellow, "instruction": "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras", "highlight": [17]},
+      {"bloc": 8, "color": Colors.red, "instruction": "PA: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ", "highlight": [8]},
+      {"bloc": 12, "color": Colors.yellow, "instruction": "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ", "highlight": [12]},
+      {"bloc": 7, "color": Colors.red, "instruction": "PA: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ", "highlight": [7]},
+      {"bloc": 11, "color": Colors.yellow, "instruction": "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ", "highlight": [11]},
+      {"bloc": 9, "color": Colors.red, "instruction": "PA: Je pose mon pied gauche sur le rouge en dansant", "highlight": [9]},
+      {"bloc": 10, "color": Colors.yellow, "instruction": "AD: Je pose mon pied droit sur le jaune en dansant  ", "highlight": [10]},
+      {"bloc": 11, "color": Colors.red, "instruction": "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.", "highlight": [11]},
+      {"bloc": 12, "color": Colors.yellow, "instruction": "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras", "highlight": [12]},
+      {"bloc": 13, "color": Colors.red, "instruction": "PA: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ", "highlight": [13]},
+      {"bloc": 14, "color": Colors.yellow, "instruction": "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ", "highlight": [14]},
+      {"bloc": 15, "color": Colors.red, "instruction": "PA: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ", "highlight": [15]},
+      {"bloc": 16, "color": Colors.yellow, "instruction": "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ", "highlight": [16]}
+      // Ajoutez d'autres instructions ici
     ];
 
     int instructionIndex = 0;
 
-    // Start with the third line
+    // Commencer avec la troisième ligne
     for (int i = 2; i >= 0; i--) {
       List<Color> lineColors = colorPatterns[i];
       for (int j = 0; j < lineColors.length; j++) {
+        // Vérifiez si l'index d'instruction est valide
+        String instructionText = instructionIndex < instructions.length
+            ? instructions[instructionIndex]["instruction"]
+            : "Pose-toi sur le bloc ${(2 - i) * lineColors.length + j + 1} et fais une action !";
+
+        List<int> highlight = instructionIndex < instructions.length
+            ? instructions[instructionIndex]["highlight"]
+            : [];
+
         _instructions.add({
           "bloc": (2 - i) * lineColors.length + j + 1,
           "color": lineColors[j],
-          "instruction": instructionIndex < instructions.length
-              ? instructions[instructionIndex]
-              : "Pose-toi sur le bloc ${(2 - i) * lineColors.length + j + 1} et fais une action !",
+          "instruction": instructionText,
+          "highlight": highlight
         });
 
         instructionIndex++;
       }
     }
 
-    _instructionTimeLeft = (_globalTimeLeft / _instructions.length).floor();
-    print(
-        'Instructions générées: $_instructions'); // Debugging: Verify if instructions are generated
+
+    print('Instructions générées: $_instructions'); // Débogage : Vérifiez si les instructions sont générées
   }
+
+
+
+
 
   void _startGame() {
     _startGlobalTimer();
@@ -135,7 +128,7 @@ class _IntroPageState extends State<IntroPage> {
 
   void _startInstructionTimer() {
     _instructionTimer?.cancel();
-    _instructionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _instructionTimer = Timer.periodic(Duration(seconds: 10), (timer) {
       if (_instructionTimeLeft > 0) {
         setState(() {
           _instructionTimeLeft--;
@@ -150,15 +143,16 @@ class _IntroPageState extends State<IntroPage> {
     if (_currentInstructionIndex < _instructions.length - 1) {
       setState(() {
         _currentInstructionIndex++;
-        _instructionTimeLeft = (_globalTimeLeft /
-                (_instructions.length - _currentInstructionIndex))
-            .floor();
+        final currentInstruction = _instructions[_currentInstructionIndex];
+        _highlightedBlocks = List<int>.from(currentInstruction["highlight"]);
+        _instructionTimeLeft = (_globalTimeLeft / (_instructions.length - _currentInstructionIndex)).floor();
       });
       _startInstructionTimer();
     } else {
       _endGame();
     }
   }
+
 
   void _endGame() {
     _globalTimer?.cancel();
@@ -194,6 +188,12 @@ class _IntroPageState extends State<IntroPage> {
     await _audioPlayer.play(AssetSource('audio/music.mp3'));
   }
 
+  // Method to check if a bloc should be highlighted based on the current instruction
+  bool _isBlocHighlighted(int bloc) {
+    final instruction = _instructions[_currentInstructionIndex]["instruction"];
+    return instruction.contains("bloc $bloc");
+  }
+
   @override
   Widget build(BuildContext context) {
     // Ensure instructions are available before accessing the index
@@ -207,19 +207,20 @@ class _IntroPageState extends State<IntroPage> {
 
     final instruction = _instructions[_currentInstructionIndex];
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black12,
       body: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
+              color: Colors.black12,
               image: DecorationImage(
                 image: NetworkImage(
-                    'https://img.freepik.com/vecteurs-premium/printemps-ete-fond-paysage-dessin-anime_441769-104.jpg'),
+                    'https://img.freepik.com/free-vector/snake-ladders-game-template-farm-theme_1308-89464.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+              filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
               child: Column(
                 children: [
                   _header(),
@@ -227,7 +228,11 @@ class _IntroPageState extends State<IntroPage> {
                   _quiz(instruction),
                   SizedBox(height: 50.0),
                   Expanded(
-                    child: _palleteGame(),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.black26
+                        ),
+                        child: _palleteGame()),
                   ),
                   _bottomButtons(),
                 ],
@@ -243,7 +248,7 @@ class _IntroPageState extends State<IntroPage> {
     return Container(
       height: 150,
       decoration: BoxDecoration(
-        color: Colors.lightBlue[200],
+        color: Colors.black26,
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(50.0),
           bottomLeft: Radius.circular(50.0),
@@ -263,24 +268,28 @@ class _IntroPageState extends State<IntroPage> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.notification_add),
+                  child: Icon(Icons.volume_down,color: Colors.lightBlue,),
                 ),
               ),
               Container(
-                width: 110,
+                width: 100,
+                height: 50,
                 decoration: BoxDecoration(
                   color: Colors.white70,
-                  borderRadius: BorderRadius.circular(20.0),
+                  borderRadius: BorderRadius.circular(15),
                   border: Border.all(color: Colors.white30, width: 2),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.access_time_filled_outlined),
-                      Text(
-                          "${_globalTimeLeft ~/ 60}:${(_globalTimeLeft % 60).toString().padLeft(2, '0')}"),
-                    ],
+                  padding: const EdgeInsets.all(2.0),
+                  child: Center(
+                    child: Text(
+                      'palet game'.toUpperCase(),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightBlue,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -292,7 +301,7 @@ class _IntroPageState extends State<IntroPage> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.settings),
+                  child: Icon(Icons.info),
                 ),
               ),
             ],
@@ -304,44 +313,25 @@ class _IntroPageState extends State<IntroPage> {
 
   Widget _quiz(Map<String, dynamic> instruction) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Container(
+        height: 150.0,
         decoration: BoxDecoration(
-          color: Colors.white60,
-          borderRadius: BorderRadius.circular(20.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              spreadRadius: 1,
-              blurRadius: 5,
-            ),
-          ],
+          color: Colors.black38,
+          borderRadius: BorderRadius.circular(30.0),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Instructions",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text(
+              instruction["instruction"],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
               ),
-              SizedBox(height: 10.0),
-              Text(instruction["instruction"]),
-              SizedBox(height: 10.0),
-              Container(
-                width: 50,
-                height: 50,
-                color: instruction["color"],
-                child: Center(
-                  child: Text(
-                    instruction["bloc"].toString(),
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -353,21 +343,26 @@ class _IntroPageState extends State<IntroPage> {
       padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 6,
+          crossAxisCount: 6, // Par exemple, 6 colonnes
         ),
         itemCount: _instructions.length,
         itemBuilder: (context, index) {
           final instruction = _instructions[index];
+          final isHighlighted = _highlightedBlocks.contains(instruction["bloc"]);
+
           return Container(
             margin: EdgeInsets.all(2.0),
             decoration: BoxDecoration(
-                color: instruction["color"],
-                borderRadius: BorderRadius.circular(4.0)),
+              color: instruction["color"],
+              borderRadius: BorderRadius.circular(4.0),
+              border: isHighlighted
+                  ? Border.all(color: Colors.green, width: 4.0) // Bordure rouge pour mise en évidence
+                  : null,
+            ),
             child: Center(
               child: Text(
                 instruction["bloc"].toString(),
-                style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),
           );
@@ -376,42 +371,44 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 
+
+
   Widget _bottomButtons() {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
-            child: Text(
-              'Précédent',
-              style: TextStyle(color: Colors.white),
+            onPressed: () {
+              Navigator.pushNamed(context, '/h');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
             ),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: _previousInstruction,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Icon(Icons.arrow_back,color: Colors.white,),
+            ),
           ),
           ElevatedButton(
-            child: Text(
-              'Suivant',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             onPressed: _nextInstruction,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Icon(Icons.arrow_forward,color: Colors.white,),
+            ),
           ),
         ],
       ),
     );
-  }
-
-  void _previousInstruction() {
-    if (_currentInstructionIndex > 0) {
-      setState(() {
-        _currentInstructionIndex--;
-        _instructionTimeLeft = (_globalTimeLeft /
-                (_instructions.length - _currentInstructionIndex))
-            .floor();
-      });
-      _startInstructionTimer();
-    }
   }
 }

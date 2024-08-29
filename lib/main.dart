@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkMode,
       home: AuthPage(),
       routes: {
+        '/intro_page' : (context)=>IntroPage(),
         '/login_register': (context)=>LoginOrRegister(),
         '/home_page': (context)=>HomePage(),
         '/profile_page': (context)=>ProfilPage(),

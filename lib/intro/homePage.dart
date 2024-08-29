@@ -14,13 +14,17 @@ class HomePage extends StatelessWidget {
         centerTitle: true,
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Commençons"),
-            SizedBox(height: 18,),
-
+            const Text("Commençons"),
+            const SizedBox(height: 18,),
+            ElevatedButton(
+                onPressed: (){
+                  Navigator.pushNamed(context, '/intro_page');
+                },
+                child: const Text("Get started"))
           ],
         ),
       ),

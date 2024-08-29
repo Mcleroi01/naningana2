@@ -3,9 +3,13 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+<<<<<<< HEAD
   cloud_firestore
   firebase_auth
   firebase_core
+=======
+  audioplayers_windows
+>>>>>>> 27a1107b1c3d2cc8e0adf4744c06b8188447cec5
 )
 
 list(APPEND FLUTTER_FFI_PLUGIN_LIST

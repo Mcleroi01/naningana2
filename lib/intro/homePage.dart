@@ -15,8 +15,8 @@ class HomePage extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.black12,
           image: DecorationImage(
-            image: NetworkImage(
-                'https://www.shutterstock.com/image-vector/blue-spiral-background-vector-illustration-600nw-2473473495.jpg'),
+            image: AssetImage(
+                'assets/images/background.webp'),
             fit: BoxFit.cover,
           ),
         ),
@@ -32,7 +32,7 @@ class HomePage extends StatelessWidget {
                   image: DecorationImage(image: AssetImage('assets/images/logo.png'))
                 ),
               ),
-              Text("Naningana",
+              Text("Na Ningana",
               style: TextStyle(
                 fontSize: 50,
                 color: Colors.black,
@@ -69,7 +69,7 @@ class HomePage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      child: Text("Quittez",style: TextStyle(color: Colors.white),)),
+                      child: Text("Quitter",style: TextStyle(color: Colors.white),)),
                 ],
 
               )

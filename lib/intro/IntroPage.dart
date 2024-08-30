@@ -3,7 +3,6 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:naningana/components/ligneoblique.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({Key? key}) : super(key: key);
@@ -25,6 +24,7 @@ class _IntroPageState extends State<IntroPage> {
   Timer? _instructionTimer;
   int _instructionTimeLeft = 0;
   bool _isSoundEnabled = true;
+
   // Add this line
   List<int> _highlightedBlocks = [];
 
@@ -82,140 +82,140 @@ class _IntroPageState extends State<IntroPage> {
         "color": Colors.red,
         "instruction": "PA: Je pose mon pied gauche sur le rouge en dansant",
         "highlight": [13],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/danse.gif"
       },
       {
         "bloc": 18,
         "color": Colors.yellow,
         "instruction": "AD: Je pose mon pied droit sur le jaune en dansant  ",
         "highlight": [18],
-        "image":
-        "https://i.gifer.com/3sjq.gif"
+        "image": "assets/images/danse2.gif"
       },
       {
         "bloc": 14,
         "color": Colors.red,
         "instruction":
-        "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.",
+            "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.",
         "highlight": [14],
-        "image":
-        "https://www.icegif.com/wp-content/uploads/2022/01/icegif-1456.gif"
+        "image": "assets/images/danse.gif"
       },
       {
         "bloc": 17,
         "color": Colors.yellow,
         "instruction":
-        "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras",
+            "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras",
         "highlight": [17],
-        "image":
-        "https://www.icegif.com/wp-content/uploads/2022/01/icegif-1456.gif"
+        "image": "assets/images/danse.gif"
       },
       {
         "bloc": 8,
         "color": Colors.red,
         "instruction":
-        "PA: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ",
+            "PA: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ",
         "highlight": [8],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/danse.gif"
       },
       {
         "bloc": 12,
         "color": Colors.yellow,
         "instruction":
-        "AD: J'avance sur la couleur de mon 2e pied et je  tapotte mes cuisses en dansant.   ",
+            "AD: J'avance sur la couleur de mon 2e pied et je  tapotte mes cuisses en dansant.   ",
         "highlight": [12],
-        "image":
-        "https://media1.giphy.com/media/fXgNQdnq8Bo96tcZAT/giphy.gif?cid=6c09b952aftcmbssi9tnh2fpu9wjdg3hxyz0pc619h6f486s&amp;ep=v1_internal_gif_by_id&amp;rid=giphy.gif&amp;ct=s"
+        "image": "assets/images/danse.gif"
       },
       {
         "bloc": 7,
         "color": Colors.red,
         "instruction":
-        "PA: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+            "PA: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras ",
         "highlight": [7],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/walk.gif"
       },
       {
         "bloc": 11,
         "color": Colors.yellow,
         "instruction":
-        "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+            "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
         "highlight": [11],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/walk.gif"
       },
       {
         "bloc": 9,
         "color": Colors.red,
-        "instruction": "PA: Je pose mon pied gauche sur le rouge en dansant",
+        "instruction": "PA: J'avance sur le rectangle en face.",
         "highlight": [9],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/walk1.gif"
       },
       {
         "bloc": 10,
         "color": Colors.yellow,
-        "instruction": "AD: Je pose mon pied droit sur le jaune en dansant  ",
+        "instruction": "AD: J'avance sur le rectangle en face.",
         "highlight": [10],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/walk1.gif"
       },
       {
         "bloc": 11,
         "color": Colors.red,
         "instruction":
-        "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.",
+            "PA: J'avance sur la couleur occupée à la 3e ligne et je reprends tous les gestes. ",
         "highlight": [11],
-        "image":
-        "https://www.icegif.com/wp-content/uploads/2022/01/icegif-1456.gif"
+        "image": "assets/images/bring.gif"
       },
       {
         "bloc": 12,
         "color": Colors.yellow,
         "instruction":
-        "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras",
+            "AD: J'avance sur la couleur occupée à la 3e ligne et je reprends tous les gestes. ",
         "highlight": [12],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/bring.gif"
+      },
+      {
+        "bloc": 17,
+        "color": Colors.yellow,
+        "instruction":
+        "PA:  je reprends tous les gestes. ",
+        "highlight": [17],
+        "image": "assets/images/danse.gif"
+      },
+      {
+        "bloc": 18,
+        "color": Colors.yellow,
+        "instruction":
+        "AD: je reprends tous les gestes. ",
+        "highlight": [18],
+        "image": "assets/images/danse.gif"
       },
       {
         "bloc": 13,
         "color": Colors.red,
         "instruction":
-        "PA: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ",
+            "PA: Je regarde mon compagnon et lui dis grâce à toi, je vis heureux et en paix",
         "highlight": [13],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/ilove.gif"
       },
       {
         "bloc": 14,
         "color": Colors.yellow,
         "instruction":
-        "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ",
+            "AD: Je regarde mon compagnon et lui dis grâce à toi, je vis heureux et en paix",
         "highlight": [14],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/ilove.gif"
       },
       {
         "bloc": 15,
         "color": Colors.red,
         "instruction":
-        "PA: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+            "Puis nous avançons sur l étoile",
         "highlight": [15],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/together.gif"
       },
       {
         "bloc": 16,
         "color": Colors.yellow,
         "instruction":
-        "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+            " Nous nous faisons un câlin",
         "highlight": [16],
-        "image":
-        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+        "image": "assets/images/calin.gif"
       }
       // Ajoutez d'autres instructions ici
     ];
@@ -229,8 +229,7 @@ class _IntroPageState extends State<IntroPage> {
         // Vérifiez si l'index d'instruction est valide
         String instructionText = instructionIndex < instructions.length
             ? instructions[instructionIndex]["instruction"]
-            : "Pose-toi sur le bloc ${(2 - i) * lineColors.length + j +
-            1} et fais une action !";
+            : "Pose-toi sur le bloc ${(2 - i) * lineColors.length + j + 1} et fais une action !";
 
         List<int> highlight = instructionIndex < instructions.length
             ? instructions[instructionIndex]["highlight"]
@@ -239,13 +238,17 @@ class _IntroPageState extends State<IntroPage> {
             ? instructions[instructionIndex]["image"]
             : "";
 
+        var blocNumber=(2 - i) * lineColors.length + j + 1;
+
         _instructions.add({
-          "bloc": (2 - i) * lineColors.length + j + 1,
+          "bloc": blocNumber,
           "color": lineColors[j],
           "instruction": instructionText,
           "highlight": highlight,
           "image": image // Ajoutez l'URL de l'image ici
         });
+
+        print('Bloc $blocNumber $instructionText ajouté avec highlight: $highlight');
 
         instructionIndex++;
       }
@@ -277,7 +280,7 @@ class _IntroPageState extends State<IntroPage> {
         _highlightedBlocks = List<int>.from(currentInstruction["highlight"]);
         // _instructionTimeLeft n'est plus nécessaire, donc supprimez cette ligne
       });
-      // Supprimez l'appel à _startInstructionTimer();
+
     } else {
       _endGame();
     }
@@ -287,45 +290,106 @@ class _IntroPageState extends State<IntroPage> {
     await _audioPlayer.stop();
   }
 
+  void _toggleSound() {
+    setState(() {
+      _isSoundEnabled = !_isSoundEnabled;
+      if (_isSoundEnabled) {
+        _audioPlayer.resume(); // Reprendre la musique si le son est activé
+      } else {
+        _audioPlayer.pause(); // Arrêter la musique si le son est désactivé
+      }
+    });
+  }
+
+  void _outgame() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text(
+                  "Vous êtes sur le point de quitter la partie. Voulez-vous continuer ?"),
+              content: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _endGame();
+                      Navigator.pushNamed(context, '/home_page');
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text("Quitter",
+                            style: TextStyle(color: Colors.white))),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.green,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Continuer",
+                          style: TextStyle(color: Colors.white),
+                        )),
+                  ),
+                ],
+              ),
+            ));
+  }
 
   void _endGame() {
     _globalTimer?.cancel();
     _stopMusic();
-    _toggleSound();
-    int stars = _calculateStars(180 - _globalTimeLeft); // Temps total passé
+    int stars = _calculateStars(_globalTimeLeft); // Temps total passé
 
     showDialog(
       context: context,
-      builder: (context) =>
-          AlertDialog(
-            title: Text("Félicitations !"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text("Bravo ! Vous avez terminé toutes les instructions !"),
-                SizedBox(height: 16),
-                Text("Temps total passé : ${180 - _globalTimeLeft} secondes."),
-                SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(
-                      stars, (index) => Icon(Icons.star, color: Colors.yellow)),
-                ),
-                SizedBox(height: 16),
-                Text(
-                    "Merci d'avoir joué. Vous avez fait un excellent travail !"),
-              ],
+      builder: (context) => AlertDialog(
+        title: Text("Félicitations !"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Bravo ! Vous avez terminé toutes les instructions !"),
+            SizedBox(height: 16),
+            Text("Temps total passé : ${_globalTimeLeft} secondes."),
+            SizedBox(height: 16),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                  stars, (index) => Icon(Icons.star, color: Colors.yellow)),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  _endGame();
-                  Navigator.pushNamed(context, '/home_page');
-                },
-                child: Text("retour à la maison"),
+            SizedBox(height: 16),
+            Text("Merci d'avoir joué. Vous avez fait un excellent travail !"),
+          ],
+        ),
+        actions: [
+          TextButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
               ),
-            ],
+            ),
+            onPressed: () {
+              _endGame();
+              Navigator.pushNamed(context, '/home_page');
+            },
+            child: Text("retour à la maison",style: TextStyle(color: Colors.white),),
           ),
+        ],
+      ),
     );
   }
 
@@ -339,23 +403,11 @@ class _IntroPageState extends State<IntroPage> {
     return 5; // Moins de 60 secondes passées -> 5 étoiles
   }
 
-
   void _playMusic() async {
     if (_isSoundEnabled) {
       _audioPlayer.setReleaseMode(ReleaseMode.loop);
       await _audioPlayer.play(AssetSource('audio/music.mpeg'));
     }
-  }
-
-  void _toggleSound() {
-    setState(() {
-      _isSoundEnabled = !_isSoundEnabled;
-      if (_isSoundEnabled) {
-        _playMusic(); // Reprendre la musique si le son est activé
-      } else {
-        _audioPlayer.stop(); // Arrêter la musique si le son est désactivé
-      }
-    });
   }
 
   // Method to check if a bloc should be highlighted based on the current instruction
@@ -385,8 +437,7 @@ class _IntroPageState extends State<IntroPage> {
             decoration: BoxDecoration(
               color: Colors.black12,
               image: DecorationImage(
-                image: NetworkImage(
-                    'https://www.shutterstock.com/image-vector/blue-spiral-background-vector-illustration-600nw-2473473495.jpg'),
+                image: AssetImage('assets/images/background.webp'),
                 fit: BoxFit.cover,
               ),
             ),
@@ -425,6 +476,7 @@ class _IntroPageState extends State<IntroPage> {
       final seconds = (totalSeconds % 60).toString().padLeft(2, '0');
       return "$minutes:$seconds";
     }
+
     return Container(
       height: 150,
       decoration: BoxDecoration(
@@ -440,64 +492,64 @@ class _IntroPageState extends State<IntroPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-          Container(
-          decoration: BoxDecoration(
-          color: Colors.white70,
-            borderRadius: BorderRadius.circular(60),
-            border: Border.all(color: Colors.white30, width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              icon: Icon(
-                _isSoundEnabled ? Icons.volume_down : Icons.volume_off,
-                color: Colors.lightBlue,
-              ),
-              onPressed: _toggleSound,
-            ),
-          ),
-        ),
-
-        Container(
-          width: 100,
-          height: 50,
-          decoration: BoxDecoration(
-            color: Colors.white70,
-            borderRadius: BorderRadius.circular(15),
-            border: Border.all(color: Colors.white30, width: 2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Center(
-              child: Text(
-                _formatDuration(_globalTimeLeft), // Affiche le temps écoulé
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.lightBlue,
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(60),
+                  border: Border.all(color: Colors.white30, width: 2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: IconButton(
+                    icon: Icon(
+                      _isSoundEnabled ? Icons.volume_down : Icons.volume_off,
+                      color: Colors.lightBlue,
+                    ),
+                    onPressed: _toggleSound,
+                  ),
                 ),
               ),
-            ),
+              Container(
+                width: 100,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(color: Colors.white30, width: 2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(2.0),
+                  child: Center(
+                    child: Text(
+                      _formatDuration(_globalTimeLeft),
+                      // Affiche le temps écoulé
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.lightBlue,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white70,
+                  borderRadius: BorderRadius.circular(60),
+                  border: Border.all(color: Colors.white30, width: 2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.info,
+                    color: Colors.lightBlue,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-        Container(
-        decoration: BoxDecoration(
-        color: Colors.white70,
-        borderRadius: BorderRadius.circular(60),
-        border: Border.all(color: Colors.white30, width: 2),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Icon(
-          Icons.info,
-          color: Colors.lightBlue,
-        ),
-      ),
-    ),
-    ],
-    ),
-    ),
-    ),
     );
   }
 
@@ -517,7 +569,7 @@ class _IntroPageState extends State<IntroPage> {
             if (instruction["image"] != null && instruction["image"].isNotEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Image.network(
+                child: Image.asset(
                   instruction["image"],
                   height: 50.0,
                   // Ajustez la hauteur de l'image
@@ -525,21 +577,7 @@ class _IntroPageState extends State<IntroPage> {
                   // Ajustez la largeur de l'image
                   fit: BoxFit.cover,
                   // Ajuste l'image pour couvrir le conteneur
-                  loadingBuilder: (BuildContext context, Widget child,
-                      ImageChunkEvent? loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          value: loadingProgress.expectedTotalBytes != null
-                              ? loadingProgress.cumulativeBytesLoaded /
-                              (loadingProgress.expectedTotalBytes ?? 1)
-                              : null,
-                        ),
-                      );
-                    }
-                  },
+
                   errorBuilder: (BuildContext context, Object error,
                       StackTrace? stackTrace) {
                     return Center(
@@ -567,12 +605,41 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 
-  Widget _starEnd (){
+  Widget _starEnd() {
     return Center(
-      child: Icon(Icons.star,size: 140,color: Colors.amber,),
+      child: Column(
+        children: [
+          Icon(
+            Icons.star,
+            size: 70,
+            color: Colors.amber,
+          ),
+
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+
+                  width: 140,
+                  height: 70,
+                  color: Colors.blue,
+                ),
+                Container(
+
+                  width: 140,
+                  height: 70,
+                  color: Colors.red,
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
-
 
   Widget _palleteGame() {
     return Padding(
@@ -585,26 +652,27 @@ class _IntroPageState extends State<IntroPage> {
         itemBuilder: (context, index) {
           final instruction = _instructions[index];
           final isHighlighted =
-          _highlightedBlocks.contains(instruction["bloc"]);
+              _highlightedBlocks.contains(instruction["bloc"]);
 
           return Container(
             margin: EdgeInsets.all(2.0),
             decoration: BoxDecoration(
               color: instruction["color"],
               borderRadius: BorderRadius.circular(4.0),
-              border: isHighlighted
-                  ? Border.all(
-                  color: Colors.green,
-                  width: 4.0) // Bordure rouge pour mise en évidence
-                  : null,
+             // border: isHighlighted
+               //   ? Border.all(
+                   //   color: Colors.green,
+                 //     width: 4.0,
+                //    )
+                //  : null,
             ),
-            child: Center(
-              child: Text(
-                instruction["bloc"].toString(),
-                style:
-                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-              ),
-            ),
+           // child: isHighlighted
+           //     ? Icon(
+            //        Icons.ac_unit_outlined,
+              //     color: Colors
+                 //       .white, // Vous pouvez personnaliser la couleur de l'icône ici
+              //    )
+            //    : null, // Ou SizedBox() si vous voulez un widget vide quand ce n'est pas mis en évidence
           );
         },
       ),
@@ -634,8 +702,7 @@ class _IntroPageState extends State<IntroPage> {
         children: [
           ElevatedButton(
             onPressed: () {
-              _endGame();
-              Navigator.pushNamed(context, '/home_page');
+              _outgame();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,

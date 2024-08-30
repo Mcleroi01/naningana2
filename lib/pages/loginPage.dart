@@ -37,7 +37,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }on FirebaseAuthException catch(e){
       Navigator.pop(context);
-      displayMessage("Email or password incorrect", context);
+      displayMessage("Email ou mot de passe incorrect", context);
     }
 
 
@@ -57,78 +57,83 @@ class _LoginPageState extends State<LoginPage> {
               padding: const EdgeInsets.all(20.0),
               child: Form(
                 key: _formKey,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(50),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.blue,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Icon(Icons.person,
+                          size: 50,
+                          color: Colors.white,),
+                        ),
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Icon(Icons.person,
-                        size: 50,
-                        color: Colors.white,),
-                      ),
-                    ),
-                    const SizedBox(height: 35,),
-                    const Text("Connectez-vous à votre ccmpte",
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),),
-                    const Text("pour commencer",
+                      const SizedBox(height: 35,),
+                      const Text("Connectez-vous à votre ccmpte",
                       style: TextStyle(
-                          fontSize: 20
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),),
-                    const SizedBox(height: 60,),
-                    //email
-                    MyTextField(
-                      prefixIcon: const Icon(Icons.email,
-                      color: Colors.black,),
-                        hintText: "email",
-                        obscureText: false,
-                        controller: emailController),
-                    const SizedBox(height: 10,),
-                    MyTextField(
-                        prefixIcon: const Icon(Icons.lock,
-                          color: Colors.black,),
-                        hintText: "mot de passe",
-                        obscureText: true,
-                        controller: passwordController),
-                    const SizedBox(height: 18,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text('mot de passe oublié ? ',style: TextStyle(
-                          color: Theme.of(context).colorScheme.secondary,
-                        ),),
-                      ],
-                    ),
-                    const SizedBox(height: 12,),
-                    MyButton(
-                        onTap: login, text: "Se connecter"),
-                    const SizedBox(height: 25,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text("Vous n'avez pas de compte ?",
+                      const Text("pour commencer",
                         style: TextStyle(
-                          color: Theme.of(context).colorScheme.inversePrimary
+                            fontSize: 20
                         ),),
-                        GestureDetector(
-                          onTap: widget.onTap,
-                          child: const Text("  Cliquez ici",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold
+                      const SizedBox(height: 60,),
+                      //email
+                      MyTextField(
+                        prefixIcon: const Icon(Icons.email,
+                        color: Colors.black,),
+                          hintText: "email",
+                          obscureText: false,
+                          controller: emailController),
+                      const SizedBox(height: 10,),
+                      MyTextField(
+                          prefixIcon: const Icon(Icons.lock,
+                            color: Colors.black,),
+                          hintText: "mot de passe",
+                          obscureText: true,
+                          controller: passwordController),
+                      const SizedBox(height: 18,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text('mot de passe oublié ? ',style: TextStyle(
+                            color: Theme.of(context).colorScheme.secondary,
                           ),),
-                        )
-                      ],
-                    )
-                  ],
+                        ],
+                      ),
+                      const SizedBox(height: 12,),
+                      MyButton(
+                          onTap: login, text: "Se connecter"),
+                      const SizedBox(height: 25,),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text("Vous n'avez pas de compte ?",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.inversePrimary
+                          ),),
+                          const SizedBox(height: 15.0,),
+                          GestureDetector(
+                            onTap: widget.onTap,
+                            child: const Text("  Cliquez ici",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold
+                            ),),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),

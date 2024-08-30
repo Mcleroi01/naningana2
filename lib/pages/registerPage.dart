@@ -151,22 +151,23 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       MyButton(
                           onTap: _submitForm,
-                          text: "register"),
+                          text: "Valider"),
 
 
                       const SizedBox(height: 25,),
 
 
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Already have an account?",
+                          Text("Vous avez séjà un compte ?",
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.inversePrimary
                             ),),
+                          const SizedBox(height: 15.0,),
                           GestureDetector(
                             onTap: widget.onTap,
-                            child: const Text("  Login here",
+                            child: const Text("  Cliquez ici",
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 void displayMessage(String message, BuildContext context){
   showDialog(
-    barrierDismissible: true,
       context: context,
       builder: (context)=>Container(
         color: Colors.red.withOpacity(0.1),

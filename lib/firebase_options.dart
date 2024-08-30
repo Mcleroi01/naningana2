@@ -50,19 +50,20 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAYC8AtZjV22i5f2a2O40VF9IULNmaDR60',
-    appId: '1:350127605223:android:1ae9268825746c6a816942',
-    messagingSenderId: '350127605223',
-    projectId: 'naningana-mobile-project',
-    storageBucket: 'naningana-mobile-project.appspot.com',
+    apiKey: 'AIzaSyCtn6D4lo5bcl1_MXk9FfKdplpVOI7WLR4',
+    appId: '1:523395239586:android:f314988afccfcf45a911fb',
+    messagingSenderId: '523395239586',
+    projectId: 'game-project-55bad',
+    storageBucket: 'game-project-55bad.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyBYc-mchCTItEnZqDEal7cJEPSPaQGqq-w',
-    appId: '1:350127605223:ios:b1a4c46436c59381816942',
-    messagingSenderId: '350127605223',
-    projectId: 'naningana-mobile-project',
-    storageBucket: 'naningana-mobile-project.appspot.com',
+    apiKey: 'AIzaSyANh-aN1B4Bv5zZMHU49aTUZxAoFs4rsyk',
+    appId: '1:523395239586:ios:17cbc6105c328395a911fb',
+    messagingSenderId: '523395239586',
+    projectId: 'game-project-55bad',
+    storageBucket: 'game-project-55bad.appspot.com',
     iosBundleId: 'com.example.naningana',
   );
+
 }

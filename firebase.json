@@ -1,1 +1,1 @@
-{"flutter":{"platforms":{"android":{"default":{"projectId":"naningana-app","appId":"1:1016671006180:android:12729981aea19edcbeabf1","fileOutput":"android/app/google-services.json"}}}}}
+{"flutter":{"platforms":{"android":{"default":{"projectId":"game-project-55bad","appId":"1:523395239586:android:f314988afccfcf45a911fb","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"game-project-55bad","configurations":{"android":"1:523395239586:android:f314988afccfcf45a911fb","ios":"1:523395239586:ios:17cbc6105c328395a911fb"}}}}}}

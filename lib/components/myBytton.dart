@@ -15,14 +15,15 @@ class MyButton extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primary,
-          borderRadius: BorderRadius.circular(12),
+          color: Colors.blue,
+          borderRadius: BorderRadius.circular(5.0),
         ),
         padding: const EdgeInsets.all(16),
         child: Center(
-          child: Text(text,style: TextStyle(
+          child: Text(text,style: const TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 16
+            fontSize: 18,
+            color: Colors.white
           ),),
         ),
       ),

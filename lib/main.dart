@@ -1,11 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:naningana/intro/IntroPage.dart';
-import 'package:naningana/pages/auth/auth.dart';
+import 'package:naningana/pages/FicheDeSuivi.dart';
+import 'package:naningana/pages/auth/AuthPage.dart';
 import 'package:naningana/pages/auth/loginOrRegister.dart';
-import 'package:naningana/pages/loginPage.dart';
 import 'package:naningana/pages/profilePage.dart';
-import 'package:naningana/pages/registerPage.dart';
 import 'package:naningana/pages/usersPage.dart';
 import 'package:naningana/theme/darkMode.dart';
 import 'package:naningana/theme/lightMode.dart';
@@ -31,13 +30,14 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: lightMode,
       darkTheme: darkMode,
-      home: AuthPage(),
+      home: const AuthPage(),
       routes: {
-        '/intro_page' : (context)=>IntroPage(),
-        '/login_register': (context)=>LoginOrRegister(),
-        '/home_page': (context)=>HomePage(),
-        '/profile_page': (context)=>ProfilPage(),
-        '/users_page': (context)=>UsersPage(),
+        '/intro_page' : (context)=>const IntroPage(),
+        '/fiche_page' : (context)=> FicheDeSuivi(),
+        '/login_register': (context)=>const LoginOrRegister(),
+        '/home_page': (context)=>const HomePage(),
+        '/profile_page': (context)=>const ProfilPage(),
+        '/users_page': (context)=>const UsersPage(),
       },
 
     );

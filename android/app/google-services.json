@@ -1,43 +1,26 @@
 {
   "project_info": {
-    "project_number": "317333936121",
-    "project_id": "flutter-naningana",
-    "storage_bucket": "flutter-naningana.appspot.com"
+    "project_number": "523395239586",
+    "project_id": "game-project-55bad",
+    "storage_bucket": "game-project-55bad.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:317333936121:android:5a4a827d411c5d9253cf28",
+        "mobilesdk_app_id": "1:523395239586:android:f314988afccfcf45a911fb",
         "android_client_info": {
           "package_name": "com.example.naningana"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "317333936121-ksv11ts1rd6a4fqp5qdgdlhmdga1la8d.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyAG3tY1n9jHR37pGCAF7v0IFcXMqiZFIAk"
+          "current_key": "AIzaSyCtn6D4lo5bcl1_MXk9FfKdplpVOI7WLR4"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "317333936121-ksv11ts1rd6a4fqp5qdgdlhmdga1la8d.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "317333936121-6bp99rat5645vs60admh31b7e5timg69.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.example.naningana"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

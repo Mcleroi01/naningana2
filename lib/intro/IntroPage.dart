@@ -3,6 +3,7 @@ import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:naningana/components/ligneoblique.dart';
 
 class IntroPage extends StatefulWidget {
   const IntroPage({Key? key}) : super(key: key);
@@ -19,10 +20,13 @@ class _IntroPageState extends State<IntroPage> {
   final Random _random = Random();
 
   Timer? _globalTimer;
-  int _globalTimeLeft = 180; // 3 minutes = 180 seconds
+  int _globalTimeLeft = 0; // 3 minutes = 180 seconds
 
   Timer? _instructionTimer;
   int _instructionTimeLeft = 0;
+  bool _isSoundEnabled = true;
+  // Add this line
+  List<int> _highlightedBlocks = [];
 
   @override
   void initState() {
@@ -36,113 +40,232 @@ class _IntroPageState extends State<IntroPage> {
   @override
   void dispose() {
     _globalTimer?.cancel();
-    _instructionTimer?.cancel();
     _audioPlayer.dispose();
     super.dispose();
   }
 
-  // Generate instructions with specific color patterns
   void _generateInstructions() {
-    _instructions.clear(); // Clear any previous instructions
+    _instructions.clear(); // Effacer les instructions précédentes
 
-    // Define fixed color patterns
+    // Définir les motifs de couleur fixes
     final List<List<Color>> colorPatterns = [
       [
-        Colors.yellow,
         Colors.red,
         Colors.blue,
-        Colors.yellow,
+        Colors.amber,
         Colors.red,
-        Colors.blue
+        Colors.blue,
+        Colors.amber
       ],
       [
         Colors.blue,
-        Colors.yellow,
+        Colors.amber,
         Colors.red,
         Colors.blue,
-        Colors.yellow,
+        Colors.amber,
         Colors.red
       ],
       [
+        Colors.amber,
         Colors.red,
         Colors.blue,
-        Colors.yellow,
+        Colors.amber,
         Colors.red,
-        Colors.blue,
-        Colors.yellow
-      ]
+        Colors.blue
+      ],
     ];
 
-    // Define the instructions for each block
-    final List<String> instructions = [
-      "PA: Je pose mon pied gauche sur le rouge en dansant.",
-      "AD: Je pose mon pied droit sur le jaune en dansant.",
-      "AD: Je pose mon 2e pied sur la couleur à côté et je danse en balançant les bras.",
-      "AD: Je pose mon 2e pied sur la couleur à côté et je danse en balançant les bras.",
-      "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.",
-      "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.",
-      "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras.",
-      "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras.",
-      "AD: J'avance sur le rectangle en face.",
-      "AD: J'avance sur le rectangle en face.",
-      "PA et AD: J'avance sur la couleur occupée à la 3e ligne et je reprends tous les gestes.",
-      "AD: J'avance sur la couleur occupée à la 3e ligne et je reprends tous les gestes.",
-      "PA  AD: Je regarde mon compagnon et lui dis : 'Grâce à toi, je vis heureux et en paix,' puis nous avançons sur l'étoile et nous nous faisons un câlin.",
-      "AD: Je regarde mon compagnon et lui dis : 'Grâce à toi, je vis heureux et en paix,' puis nous avançons sur l'étoile et nous nous faisons un câlin.",
-      " AD:  puis nous avançons sur l'étoile et nous nous faisons un câlin.",
-      "PA  AD:  puis nous avançons sur l'étoile et nous nous faisons un câlin.",
+    // Définir les instructions pour chaque bloc
+    final List<Map<String, dynamic>> instructions = [
+      {
+        "bloc": 13,
+        "color": Colors.red,
+        "instruction": "PA: Je pose mon pied gauche sur le rouge en dansant",
+        "highlight": [13],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 18,
+        "color": Colors.yellow,
+        "instruction": "AD: Je pose mon pied droit sur le jaune en dansant  ",
+        "highlight": [18],
+        "image":
+        "https://i.gifer.com/3sjq.gif"
+      },
+      {
+        "bloc": 14,
+        "color": Colors.red,
+        "instruction":
+        "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.",
+        "highlight": [14],
+        "image":
+        "https://www.icegif.com/wp-content/uploads/2022/01/icegif-1456.gif"
+      },
+      {
+        "bloc": 17,
+        "color": Colors.yellow,
+        "instruction":
+        "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras",
+        "highlight": [17],
+        "image":
+        "https://www.icegif.com/wp-content/uploads/2022/01/icegif-1456.gif"
+      },
+      {
+        "bloc": 8,
+        "color": Colors.red,
+        "instruction":
+        "PA: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ",
+        "highlight": [8],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 12,
+        "color": Colors.yellow,
+        "instruction":
+        "AD: J'avance sur la couleur de mon 2e pied et je  tapotte mes cuisses en dansant.   ",
+        "highlight": [12],
+        "image":
+        "https://media1.giphy.com/media/fXgNQdnq8Bo96tcZAT/giphy.gif?cid=6c09b952aftcmbssi9tnh2fpu9wjdg3hxyz0pc619h6f486s&amp;ep=v1_internal_gif_by_id&amp;rid=giphy.gif&amp;ct=s"
+      },
+      {
+        "bloc": 7,
+        "color": Colors.red,
+        "instruction":
+        "PA: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+        "highlight": [7],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 11,
+        "color": Colors.yellow,
+        "instruction":
+        "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+        "highlight": [11],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 9,
+        "color": Colors.red,
+        "instruction": "PA: Je pose mon pied gauche sur le rouge en dansant",
+        "highlight": [9],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 10,
+        "color": Colors.yellow,
+        "instruction": "AD: Je pose mon pied droit sur le jaune en dansant  ",
+        "highlight": [10],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 11,
+        "color": Colors.red,
+        "instruction":
+        "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.",
+        "highlight": [11],
+        "image":
+        "https://www.icegif.com/wp-content/uploads/2022/01/icegif-1456.gif"
+      },
+      {
+        "bloc": 12,
+        "color": Colors.yellow,
+        "instruction":
+        "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras",
+        "highlight": [12],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 13,
+        "color": Colors.red,
+        "instruction":
+        "PA: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ",
+        "highlight": [13],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 14,
+        "color": Colors.yellow,
+        "instruction":
+        "AD: J'avance sur la couleur de mon 2e pied et je tapotte mes cuisses en dansant.   ",
+        "highlight": [14],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 15,
+        "color": Colors.red,
+        "instruction":
+        "PA: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+        "highlight": [15],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      },
+      {
+        "bloc": 16,
+        "color": Colors.yellow,
+        "instruction":
+        "AD: J'avance sur la couleur qui était à côté de ma jambe droite et je tourne sur moi en balançant mes bras. ",
+        "highlight": [16],
+        "image":
+        "https://i.pinimg.com/originals/57/e2/09/57e209296e586933febadf06e271a3d3.gif"
+      }
+      // Ajoutez d'autres instructions ici
     ];
 
     int instructionIndex = 0;
 
-    // Start with the third line
+    // Commencer avec la troisième ligne
     for (int i = 2; i >= 0; i--) {
       List<Color> lineColors = colorPatterns[i];
       for (int j = 0; j < lineColors.length; j++) {
+        // Vérifiez si l'index d'instruction est valide
+        String instructionText = instructionIndex < instructions.length
+            ? instructions[instructionIndex]["instruction"]
+            : "Pose-toi sur le bloc ${(2 - i) * lineColors.length + j +
+            1} et fais une action !";
+
+        List<int> highlight = instructionIndex < instructions.length
+            ? instructions[instructionIndex]["highlight"]
+            : [];
+        String image = instructionIndex < instructions.length
+            ? instructions[instructionIndex]["image"]
+            : "";
+
         _instructions.add({
           "bloc": (2 - i) * lineColors.length + j + 1,
           "color": lineColors[j],
-          "instruction": instructionIndex < instructions.length
-              ? instructions[instructionIndex]
-              : "Pose-toi sur le bloc ${(2 - i) * lineColors.length + j + 1} et fais une action !",
+          "instruction": instructionText,
+          "highlight": highlight,
+          "image": image // Ajoutez l'URL de l'image ici
         });
 
         instructionIndex++;
       }
     }
 
-    _instructionTimeLeft = (_globalTimeLeft / _instructions.length).floor();
     print(
-        'Instructions générées: $_instructions'); // Debugging: Verify if instructions are generated
+        'Instructions générées: $_instructions'); // Débogage : Vérifiez si les instructions sont générées
   }
 
   void _startGame() {
     _startGlobalTimer();
-    _startInstructionTimer();
+    _playMusic();
+    // Supprimez l'appel à _startInstructionTimer();
   }
 
   void _startGlobalTimer() {
     _globalTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_globalTimeLeft > 0) {
-        setState(() {
-          _globalTimeLeft--;
-        });
-      } else {
-        _endGame();
-      }
-    });
-  }
-
-  void _startInstructionTimer() {
-    _instructionTimer?.cancel();
-    _instructionTimer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_instructionTimeLeft > 0) {
-        setState(() {
-          _instructionTimeLeft--;
-        });
-      } else {
-        _nextInstruction();
-      }
+      setState(() {
+        _globalTimeLeft++; // Incrémentez le temps global
+      });
     });
   }
 
@@ -150,48 +273,95 @@ class _IntroPageState extends State<IntroPage> {
     if (_currentInstructionIndex < _instructions.length - 1) {
       setState(() {
         _currentInstructionIndex++;
-        _instructionTimeLeft = (_globalTimeLeft /
-                (_instructions.length - _currentInstructionIndex))
-            .floor();
+        final currentInstruction = _instructions[_currentInstructionIndex];
+        _highlightedBlocks = List<int>.from(currentInstruction["highlight"]);
+        // _instructionTimeLeft n'est plus nécessaire, donc supprimez cette ligne
       });
-      _startInstructionTimer();
+      // Supprimez l'appel à _startInstructionTimer();
     } else {
       _endGame();
     }
   }
 
+  void _stopMusic() async {
+    await _audioPlayer.stop();
+  }
+
+
   void _endGame() {
     _globalTimer?.cancel();
-    _instructionTimer?.cancel();
+    _stopMusic();
+    _toggleSound();
+    int stars = _calculateStars(180 - _globalTimeLeft); // Temps total passé
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text("Fin du jeu"),
-        content: Text("Le jeu est terminé !"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              _resetGame();
-            },
-            child: Text("Rejouer"),
+      builder: (context) =>
+          AlertDialog(
+            title: Text("Félicitations !"),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text("Bravo ! Vous avez terminé toutes les instructions !"),
+                SizedBox(height: 16),
+                Text("Temps total passé : ${180 - _globalTimeLeft} secondes."),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(
+                      stars, (index) => Icon(Icons.star, color: Colors.yellow)),
+                ),
+                SizedBox(height: 16),
+                Text(
+                    "Merci d'avoir joué. Vous avez fait un excellent travail !"),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  _endGame();
+                  Navigator.pushNamed(context, '/home_page');
+                },
+                child: Text("retour à la maison"),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
-  void _resetGame() {
+  int _calculateStars(int elapsedTime) {
+    // Vous pouvez ajuster les seuils en fonction de vos préférences
+    if (elapsedTime > 150) return 1; // Plus de 150 secondes passées -> 1 étoile
+    if (elapsedTime > 120)
+      return 2; // Plus de 120 secondes passées -> 2 étoiles
+    if (elapsedTime > 90) return 3; // Plus de 90 secondes passées -> 3 étoiles
+    if (elapsedTime > 60) return 4; // Plus de 60 secondes passées -> 4 étoiles
+    return 5; // Moins de 60 secondes passées -> 5 étoiles
+  }
+
+
+  void _playMusic() async {
+    if (_isSoundEnabled) {
+      _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      await _audioPlayer.play(AssetSource('audio/music.mpeg'));
+    }
+  }
+
+  void _toggleSound() {
     setState(() {
-      _currentInstructionIndex = 0;
-      _globalTimeLeft = 180;
-      _generateInstructions(); // Regenerate instructions on game restart
-      _startGame();
+      _isSoundEnabled = !_isSoundEnabled;
+      if (_isSoundEnabled) {
+        _playMusic(); // Reprendre la musique si le son est activé
+      } else {
+        _audioPlayer.stop(); // Arrêter la musique si le son est désactivé
+      }
     });
   }
 
-  void _playMusic() async {
-    await _audioPlayer.play(AssetSource('audio/music.mp3'));
+  // Method to check if a bloc should be highlighted based on the current instruction
+  bool _isBlocHighlighted(int bloc) {
+    final instruction = _instructions[_currentInstructionIndex]["instruction"];
+    return instruction.contains("bloc $bloc");
   }
 
   @override
@@ -206,28 +376,38 @@ class _IntroPageState extends State<IntroPage> {
     }
 
     final instruction = _instructions[_currentInstructionIndex];
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.black12,
       body: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
+              color: Colors.black12,
               image: DecorationImage(
                 image: NetworkImage(
-                    'https://img.freepik.com/vecteurs-premium/printemps-ete-fond-paysage-dessin-anime_441769-104.jpg'),
+                    'https://www.shutterstock.com/image-vector/blue-spiral-background-vector-illustration-600nw-2473473495.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
             child: BackdropFilter(
-              filter: ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+              filter: ImageFilter.blur(sigmaX: 12.0, sigmaY: 12.0),
               child: Column(
                 children: [
                   _header(),
-                  SizedBox(height: 30.0),
+                  SizedBox(height: 10.0),
                   _quiz(instruction),
-                  SizedBox(height: 50.0),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  _starEnd(),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Expanded(
-                    child: _palleteGame(),
+                    child: Container(
+                        decoration: BoxDecoration(color: Colors.black26),
+                        child: _palleteGame()),
                   ),
                   _bottomButtons(),
                 ],
@@ -240,10 +420,15 @@ class _IntroPageState extends State<IntroPage> {
   }
 
   Widget _header() {
+    String _formatDuration(int totalSeconds) {
+      final minutes = (totalSeconds ~/ 60).toString().padLeft(2, '0');
+      final seconds = (totalSeconds % 60).toString().padLeft(2, '0');
+      return "$minutes:$seconds";
+    }
     return Container(
       height: 150,
       decoration: BoxDecoration(
-        color: Colors.lightBlue[200],
+        color: Colors.black26,
         borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(50.0),
           bottomLeft: Radius.circular(50.0),
@@ -255,119 +440,169 @@ class _IntroPageState extends State<IntroPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.circular(60),
-                  border: Border.all(color: Colors.white30, width: 2),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.notification_add),
-                ),
+          Container(
+          decoration: BoxDecoration(
+          color: Colors.white70,
+            borderRadius: BorderRadius.circular(60),
+            border: Border.all(color: Colors.white30, width: 2),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              icon: Icon(
+                _isSoundEnabled ? Icons.volume_down : Icons.volume_off,
+                color: Colors.lightBlue,
               ),
-              Container(
-                width: 110,
-                decoration: BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.circular(20.0),
-                  border: Border.all(color: Colors.white30, width: 2),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.access_time_filled_outlined),
-                      Text(
-                          "${_globalTimeLeft ~/ 60}:${(_globalTimeLeft % 60).toString().padLeft(2, '0')}"),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white70,
-                  borderRadius: BorderRadius.circular(60),
-                  border: Border.all(color: Colors.white30, width: 2),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(Icons.settings),
-                ),
-              ),
-            ],
+              onPressed: _toggleSound,
+            ),
           ),
         ),
+
+        Container(
+          width: 100,
+          height: 50,
+          decoration: BoxDecoration(
+            color: Colors.white70,
+            borderRadius: BorderRadius.circular(15),
+            border: Border.all(color: Colors.white30, width: 2),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Center(
+              child: Text(
+                _formatDuration(_globalTimeLeft), // Affiche le temps écoulé
+                style: TextStyle(
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightBlue,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Container(
+        decoration: BoxDecoration(
+        color: Colors.white70,
+        borderRadius: BorderRadius.circular(60),
+        border: Border.all(color: Colors.white30, width: 2),
       ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Icon(
+          Icons.info,
+          color: Colors.lightBlue,
+        ),
+      ),
+    ),
+    ],
+    ),
+    ),
+    ),
     );
   }
 
   Widget _quiz(Map<String, dynamic> instruction) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Container(
+        padding: const EdgeInsets.all(10.0),
         decoration: BoxDecoration(
-          color: Colors.white60,
-          borderRadius: BorderRadius.circular(20.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              spreadRadius: 1,
-              blurRadius: 5,
-            ),
-          ],
+          color: Colors.black38,
+          borderRadius: BorderRadius.circular(30.0),
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Instructions",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 10.0),
-              Text(instruction["instruction"]),
-              SizedBox(height: 10.0),
-              Container(
-                width: 50,
-                height: 50,
-                color: instruction["color"],
-                child: Center(
-                  child: Text(
-                    instruction["bloc"].toString(),
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.bold),
-                  ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Afficher l'image associée à l'instruction
+            if (instruction["image"] != null && instruction["image"].isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Image.network(
+                  instruction["image"],
+                  height: 50.0,
+                  // Ajustez la hauteur de l'image
+                  width: 50.0,
+                  // Ajustez la largeur de l'image
+                  fit: BoxFit.cover,
+                  // Ajuste l'image pour couvrir le conteneur
+                  loadingBuilder: (BuildContext context, Widget child,
+                      ImageChunkEvent? loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                              (loadingProgress.expectedTotalBytes ?? 1)
+                              : null,
+                        ),
+                      );
+                    }
+                  },
+                  errorBuilder: (BuildContext context, Object error,
+                      StackTrace? stackTrace) {
+                    return Center(
+                      child: Icon(Icons.error, color: Colors.red, size: 40.0),
+                    );
+                  },
                 ),
               ),
-            ],
-          ),
+            // Afficher le texte de l'instruction
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                instruction["instruction"],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
+
+  Widget _starEnd (){
+    return Center(
+      child: Icon(Icons.star,size: 140,color: Colors.amber,),
+    );
+  }
+
 
   Widget _palleteGame() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 6,
+          crossAxisCount: 6, // Par exemple, 6 colonnes
         ),
         itemCount: _instructions.length,
         itemBuilder: (context, index) {
           final instruction = _instructions[index];
+          final isHighlighted =
+          _highlightedBlocks.contains(instruction["bloc"]);
+
           return Container(
             margin: EdgeInsets.all(2.0),
             decoration: BoxDecoration(
-                color: instruction["color"],
-                borderRadius: BorderRadius.circular(4.0)),
+              color: instruction["color"],
+              borderRadius: BorderRadius.circular(4.0),
+              border: isHighlighted
+                  ? Border.all(
+                  color: Colors.green,
+                  width: 4.0) // Bordure rouge pour mise en évidence
+                  : null,
+            ),
             child: Center(
               child: Text(
                 instruction["bloc"].toString(),
                 style:
-                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
               ),
             ),
           );
@@ -376,42 +611,64 @@ class _IntroPageState extends State<IntroPage> {
     );
   }
 
+  Widget _imageGrid() {
+    return ListView.builder(
+      itemCount: _instructions.length,
+      itemBuilder: (context, index) {
+        final instruction = _instructions[index];
+
+        return ListTile(
+          leading: Image.network(instruction["image"], width: 50, height: 50),
+          // Affichage de l'image
+          title: Text(instruction["instruction"]),
+        );
+      },
+    );
+  }
+
   Widget _bottomButtons() {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.all(20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           ElevatedButton(
-            child: Text(
-              'Précédent',
-              style: TextStyle(color: Colors.white),
+            onPressed: () {
+              _endGame();
+              Navigator.pushNamed(context, '/home_page');
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
             ),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            onPressed: _previousInstruction,
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Icon(
+                Icons.output_sharp,
+                color: Colors.white,
+              ),
+            ),
           ),
           ElevatedButton(
-            child: Text(
-              'Suivant',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
             onPressed: _nextInstruction,
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: Icon(
+                Icons.arrow_forward,
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
     );
-  }
-
-  void _previousInstruction() {
-    if (_currentInstructionIndex > 0) {
-      setState(() {
-        _currentInstructionIndex--;
-        _instructionTimeLeft = (_globalTimeLeft /
-                (_instructions.length - _currentInstructionIndex))
-            .floor();
-      });
-      _startInstructionTimer();
-    }
   }
 }

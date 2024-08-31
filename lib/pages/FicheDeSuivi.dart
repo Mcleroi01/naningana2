@@ -27,7 +27,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
   bool isValidateVisible = false;
   bool isButtonVisible = true;
   FirestoreService fire = FirestoreService();
-  late GetStorage stockage;
+  GetStorage stockage = GetStorage();
   final List<Map<String, dynamic>> questions = [
     {
       "label": "Santé physique",
@@ -129,6 +129,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
       // Soumettre les réponses ou naviguer vers une autre page
       setState(() {
         isValidateVisible = true;
+        isButtonVisible = false;
       });
       print("Mes choix____________________________________ $_answers");
     }
@@ -270,7 +271,6 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Visibility(
-                                visible: isButtonVisible,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.orangeAccent,
@@ -294,7 +294,9 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                                     shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(5.0))),
                                   ),
-                                  onPressed: _nextQuestion,
+                                  onPressed: (){
+                                    _nextQuestion();
+                                  },
                                   child: const Text("Suivant",style: TextStyle(
                                       fontSize: 16
                                   ),),
@@ -319,7 +321,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                                   onPressed: ()async{
                                     await stockage.write("PASSENGER",{"user":"${fire.currentUser?.email}"});
                                     fire.createFiche(_answers);
-                                    Navigator.pushNamed(context, '/intro_page');
+                                    Navigator.pushNamed(context, '/home_page');
                                     fire.readData();
                                   },
                                   child: const Text("Envoyer les résultats",style: TextStyle(

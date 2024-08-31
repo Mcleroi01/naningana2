@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 
 class FirestoreService {
+  GetStorage storage = GetStorage();
   final fire = FirebaseFirestore.instance;
   User? currentUser = FirebaseAuth.instance.currentUser;
-  GetStorage? storage;
   create(String? email, String name, String guideName, String guidePhone){
     try{
       fire.collection("users").add({
@@ -49,10 +49,10 @@ class FirestoreService {
   //     return v;
   //   }
 
-  Future<Map<String, dynamic>> readData() async{
-    var data = await storage!.read("PASSENGER");
-    return data;
+  Future<Map<String, dynamic>?> readData() async{
+    var data = await storage.read("PASSENGER");
     print("_____________________________________________${data}");
+    return data;
   }
 
   // Future<String>getDocumentField(String fieldName) async {

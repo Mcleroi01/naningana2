@@ -30,7 +30,7 @@ class _AuthPageState extends State<AuthPage> {
 
           if(snapshot.hasData)
           {return FicheDeSuivi();}
-          else if(fire.readData() == fire.currentUser?.email){
+          else if(fire.readData() != null){
             return HomePage();
           }
           else{

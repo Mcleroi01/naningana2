@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:naningana/components/afficherMessageInfo.dart';
 import 'package:naningana/services/firestoreService.dart';
 
 
@@ -31,6 +32,7 @@ class HomePage extends StatelessWidget {
                 onPressed: (){
                   fire.logout();
                   Navigator.pushNamed(context, '/login_register');
+                  afficherMessageInfo(context, "Deconnexion effectuée avec succès", Colors.orangeAccent, Colors.black);
                         },
                 child: const Text("se deconnecter",
                 style: TextStyle(

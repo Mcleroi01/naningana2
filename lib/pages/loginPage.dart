@@ -34,11 +34,11 @@ class _LoginPageState extends State<LoginPage> {
           password: passwordController.text);
       if(context.mounted) {
         Navigator.pop(context);
-        afficherMessageInfo(context, "Connecté en tant que : ${emailController.text}", Colors.green);
+        afficherMessageInfo(context, "Connecté en tant que : ${emailController.text}", Colors.green, Colors.white);
       }
     }on FirebaseAuthException catch(e){
       Navigator.pop(context);
-      displayMessage("Email ou mot de passe incorrect", context);
+      handleAuthError(e, context);
     }
 
 

@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:naningana/intro/IntroPage.dart';
+import 'package:naningana/gameNaningana/IntroPage.dart';
 import 'package:naningana/pages/FicheDeSuivi.dart';
 import 'package:naningana/pages/auth/AuthPage.dart';
 import 'package:naningana/pages/auth/loginOrRegister.dart';
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       darkTheme: darkMode,
       home: const AuthPage(),
       routes: {
-        '/intro_page' : (context)=>const IntroPage(),
+        '/intro_page' : (context)=>const Naninganapage(),
         '/fiche_page' : (context)=> FicheDeSuivi(),
         '/login_register': (context)=>const LoginOrRegister(),
         '/home_page': (context)=>const HomePage(),

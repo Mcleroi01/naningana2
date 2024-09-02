@@ -4,19 +4,18 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class IntroPage extends StatefulWidget {
-  const IntroPage({Key? key}) : super(key: key);
+class Naninganapage extends StatefulWidget {
+  const Naninganapage({Key? key}) : super(key: key);
 
   @override
-  _IntroPageState createState() => _IntroPageState();
+  _Naninganapage createState() => _Naninganapage();
 }
 
-class _IntroPageState extends State<IntroPage> {
+class _Naninganapage extends State<Naninganapage> {
   late AudioPlayer _audioPlayer;
   int _currentInstructionIndex = 0;
   final List<Color> _availableColors = [Colors.red, Colors.blue, Colors.yellow];
   late List<Map<String, dynamic>> _instructions = [];
-  final Random _random = Random();
 
   Timer? _globalTimer;
   int _globalTimeLeft = 0; // 3 minutes = 180 seconds
@@ -27,6 +26,10 @@ class _IntroPageState extends State<IntroPage> {
 
   // Add this line
   List<int> _highlightedBlocks = [];
+  int? _selectedBlock;
+  int? _selectedStar;
+  Color? _selectedColor;
+  Map<int, List<int>> _userSelections = {};
 
   @override
   void initState() {
@@ -93,7 +96,7 @@ class _IntroPageState extends State<IntroPage> {
       },
       {
         "bloc": 14,
-        "color": Colors.red,
+        "color": Colors.blue,
         "instruction":
             "PA: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras.",
         "highlight": [14],
@@ -101,7 +104,7 @@ class _IntroPageState extends State<IntroPage> {
       },
       {
         "bloc": 17,
-        "color": Colors.yellow,
+        "color": Colors.blue,
         "instruction":
             "AD: Je pose mon 2e pied sur la couleur à  côté et je danse en balançant les bras",
         "highlight": [17],
@@ -172,16 +175,14 @@ class _IntroPageState extends State<IntroPage> {
       {
         "bloc": 17,
         "color": Colors.yellow,
-        "instruction":
-        "PA:  je reprends tous les gestes. ",
+        "instruction": "PA:  je reprends tous les gestes. ",
         "highlight": [17],
         "image": "assets/images/danse.gif"
       },
       {
         "bloc": 18,
         "color": Colors.yellow,
-        "instruction":
-        "AD: je reprends tous les gestes. ",
+        "instruction": "AD: je reprends tous les gestes. ",
         "highlight": [18],
         "image": "assets/images/danse.gif"
       },
@@ -204,16 +205,14 @@ class _IntroPageState extends State<IntroPage> {
       {
         "bloc": 15,
         "color": Colors.red,
-        "instruction":
-            "Puis nous avançons sur l étoile",
+        "instruction": "Puis nous avançons sur l étoile",
         "highlight": [15],
         "image": "assets/images/together.gif"
       },
       {
         "bloc": 16,
         "color": Colors.yellow,
-        "instruction":
-            " Nous nous faisons un câlin",
+        "instruction": " Nous nous faisons un câlin",
         "highlight": [16],
         "image": "assets/images/calin.gif"
       }
@@ -238,7 +237,7 @@ class _IntroPageState extends State<IntroPage> {
             ? instructions[instructionIndex]["image"]
             : "";
 
-        var blocNumber=(2 - i) * lineColors.length + j + 1;
+        var blocNumber = (2 - i) * lineColors.length + j + 1;
 
         _instructions.add({
           "bloc": blocNumber,
@@ -248,7 +247,8 @@ class _IntroPageState extends State<IntroPage> {
           "image": image // Ajoutez l'URL de l'image ici
         });
 
-        print('Bloc $blocNumber $instructionText ajouté avec highlight: $highlight');
+        print(
+            'Bloc $blocNumber $instructionText ajouté avec highlight: $highlight');
 
         instructionIndex++;
       }
@@ -273,17 +273,92 @@ class _IntroPageState extends State<IntroPage> {
   }
 
   void _nextInstruction() {
-    if (_currentInstructionIndex < _instructions.length - 1) {
+    if (_selectedBlock != null) {
+      if (_currentInstructionIndex < _instructions.length - 1) {
+        setState(() {
+          // Sauvegarder la sélection actuelle de l'utilisateur
+          _userSelections[_currentInstructionIndex] =
+              List<int>.from(_highlightedBlocks);
+
+          _currentInstructionIndex++;
+          final currentInstruction = _instructions[_currentInstructionIndex];
+          _highlightedBlocks = List<int>.from(currentInstruction["highlight"]);
+
+          // Restaurer la sélection de l'utilisateur pour la nouvelle instruction
+          _highlightedBlocks = _userSelections[_currentInstructionIndex] ?? [];
+          _selectedBlock =
+              _highlightedBlocks.isNotEmpty ? _highlightedBlocks.first : null;
+          _selectedColor = _instructions.firstWhere(
+              (instruction) => instruction["bloc"] == _selectedBlock,
+              orElse: () => {"color": Colors.transparent})["color"] as Color?;
+        });
+      } else {
+        _endGame();
+      }
+    } else {
+      _showError();
+    }
+  }
+
+  // Méthode pour aller à l'instruction précédente
+  void _previousInstruction() {
+    if (_currentInstructionIndex > 0) {
       setState(() {
-        _currentInstructionIndex++;
+        // Sauvegarder la sélection actuelle de l'utilisateur
+        _userSelections[_currentInstructionIndex] =
+            List<int>.from(_highlightedBlocks);
+
+        _currentInstructionIndex--;
         final currentInstruction = _instructions[_currentInstructionIndex];
         _highlightedBlocks = List<int>.from(currentInstruction["highlight"]);
-        // _instructionTimeLeft n'est plus nécessaire, donc supprimez cette ligne
-      });
 
-    } else {
-      _endGame();
+        // Restaurer les sélections de l'utilisateur pour l'instruction précédente
+        _highlightedBlocks = _userSelections[_currentInstructionIndex] ?? [];
+        _selectedBlock =
+            _highlightedBlocks.isNotEmpty ? _highlightedBlocks.first : null;
+        _selectedColor = _instructions.firstWhere(
+            (instruction) => instruction["bloc"] == _selectedBlock,
+            orElse: () => {"color": Colors.transparent})["color"] as Color?;
+      });
     }
+  }
+
+  // Méthode pour gérer la sélection des blocs
+  void _onBlocSelected(int blocNumber) {
+    setState(() {
+      // Réinitialiser la sélection des étoiles si un bloc est sélectionné
+      _selectedStar = null;
+
+      // Trouver la couleur du bloc sélectionné
+      Color? color = _instructions.firstWhere(
+              (instruction) => instruction["bloc"] == blocNumber,
+          orElse: () => {"color": Colors.transparent})["color"] as Color?;
+
+      // Si le bloc sélectionné est déjà le bloc actuel, on le désélectionne
+      if (_highlightedBlocks.isNotEmpty &&
+          _highlightedBlocks.first == blocNumber) {
+        _highlightedBlocks.clear();
+        _selectedBlock = null;
+        _selectedColor = null; // Réinitialiser la couleur
+      } else {
+        // Si un bloc est déjà sélectionné, on le désélectionne
+        _highlightedBlocks.clear();
+        // Sélectionne le nouveau bloc
+        _highlightedBlocks.add(blocNumber);
+        _selectedBlock = blocNumber;
+        _selectedColor = color; // Mettre à jour la couleur
+      }
+
+      // Conserver la sélection de l'utilisateur pour l'instruction actuelle
+      _userSelections[_currentInstructionIndex] =
+      List<int>.from(_highlightedBlocks);
+    });
+  }
+
+
+  void _showError() {
+    // Afficher une erreur si le bloc sélectionné est incorrect
+    print('Erreur: bloc incorrect sélectionné.');
   }
 
   void _stopMusic() async {
@@ -352,7 +427,39 @@ class _IntroPageState extends State<IntroPage> {
   void _endGame() {
     _globalTimer?.cancel();
     _stopMusic();
-    int stars = _calculateStars(_globalTimeLeft); // Temps total passé
+
+    // Calcul du score
+    int score = 0;
+    for (int i = 0; i < _instructions.length; i++) {
+      final instruction = _instructions[i];
+      if (_userSelections.length > i) {
+        var selected = _userSelections[i];
+        if (selected is int) {
+          // Vérifier si la sélection correspond à un bloc
+          Color? selectedColor = _instructions.firstWhere(
+              (inst) => inst["bloc"] == selected,
+              orElse: () => {"color": Colors.transparent})["color"] as Color?;
+
+          if (selectedColor == instruction["color"]) {
+            score++;
+          }
+        } else if (selected is int?) {
+          // Vérifier si la sélection correspond à une zone spécifique (étoile ou rectangle)
+          if (instruction["highlight"].contains(selected)) {
+            score++;
+          }
+        }
+      }
+    }
+
+    // Calculer le nombre d'étoiles basé sur le score
+    int totalInstructions = _instructions.length;
+    int stars = (score / totalInstructions * 3)
+        .floor(); // Déterminez le nombre d'étoiles
+
+    // Ajuster la logique pour attribuer les étoiles
+    if (stars < 0) stars = 0; // Assurez-vous que le nombre d'étoiles est >= 0
+    if (stars > 3) stars = 3; // Assurez-vous que le nombre d'étoiles est <= 3
 
     showDialog(
       context: context,
@@ -365,10 +472,14 @@ class _IntroPageState extends State<IntroPage> {
             SizedBox(height: 16),
             Text("Temps total passé : ${_globalTimeLeft} secondes."),
             SizedBox(height: 16),
+            Text("Score : $score/$totalInstructions"), // Afficher le score
+            SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(
-                  stars, (index) => Icon(Icons.star, color: Colors.yellow)),
+                stars,
+                (index) => Icon(Icons.star, color: Colors.yellow),
+              ),
             ),
             SizedBox(height: 16),
             Text("Merci d'avoir joué. Vous avez fait un excellent travail !"),
@@ -383,24 +494,74 @@ class _IntroPageState extends State<IntroPage> {
               ),
             ),
             onPressed: () {
-              _endGame();
               Navigator.pushNamed(context, '/home_page');
             },
-            child: Text("retour à la maison",style: TextStyle(color: Colors.white),),
+            child: Text(
+              "Retour à la maison",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
     );
   }
 
-  int _calculateStars(int elapsedTime) {
-    // Vous pouvez ajuster les seuils en fonction de vos préférences
-    if (elapsedTime > 150) return 1; // Plus de 150 secondes passées -> 1 étoile
-    if (elapsedTime > 120)
-      return 2; // Plus de 120 secondes passées -> 2 étoiles
-    if (elapsedTime > 90) return 3; // Plus de 90 secondes passées -> 3 étoiles
-    if (elapsedTime > 60) return 4; // Plus de 60 secondes passées -> 4 étoiles
-    return 5; // Moins de 60 secondes passées -> 5 étoiles
+  void _resetGame() {
+    // Réinitialiser le temps
+    _globalTimeLeft = 0;
+
+    // Réinitialiser l'index des instructions
+    _currentInstructionIndex = 0;
+
+    // Réinitialiser les blocs mis en surbrillance
+    _highlightedBlocks = _instructions.isNotEmpty
+        ? List<int>.from(_instructions[0]["highlight"])
+        : [];
+
+    // Réinitialiser les sélections des utilisateurs
+    _userSelections.clear();
+
+    // Arrêter le minuteur si en cours
+    _globalTimer?.cancel();
+
+    // Réinitialiser l'audio
+    _audioPlayer.stop();
+    _audioPlayer.seek(Duration.zero);
+
+    _startGame();
+    Navigator.pop(context);
+  }
+
+  void _menu() {
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: Text('Menu'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                      onPressed: _resetGame,
+                      child: Text(
+                        'Recommencer la partie',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Colors.white),
+                      )),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _outgame();
+
+                      },
+                      child: Text(
+                        'Quitter la partie',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(color: Colors.red),
+                      ))
+                ],
+              ),
+            ));
   }
 
   void _playMusic() async {
@@ -499,7 +660,7 @@ class _IntroPageState extends State<IntroPage> {
                   border: Border.all(color: Colors.white30, width: 2),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(4.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: IconButton(
                     icon: Icon(
                       _isSoundEnabled ? Icons.volume_down : Icons.volume_off,
@@ -539,10 +700,14 @@ class _IntroPageState extends State<IntroPage> {
                   border: Border.all(color: Colors.white30, width: 2),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(
-                    Icons.info,
+                  padding: const EdgeInsets.all(2.0),
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.list,
+                      color: Colors.lightBlue,
+                    ),
                     color: Colors.lightBlue,
+                    onPressed: _menu,
                   ),
                 ),
               ),
@@ -614,83 +779,96 @@ class _IntroPageState extends State<IntroPage> {
             size: 70,
             color: Colors.amber,
           ),
-
           Padding(
             padding: const EdgeInsets.all(8.0),
-
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Container(
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      // Réinitialiser la sélection du bloc si une étoile est sélectionnée
+                      _selectedBlock = null;
 
-                  width: 140,
-                  height: 70,
-                  color: Colors.blue,
+                      _selectedStar = 1; // Marquer le premier container comme sélectionné
+                    });
+                  },
+                  child: Container(
+                    width: 140,
+                    height: 70,
+                    color: _selectedStar == 1 ? Colors.blueAccent : Colors.blue,
+                    // Changer la couleur en fonction de la sélection
+                    child: Center(
+                      child: _selectedStar == 1
+                          ? Icon(Icons.check, color: Colors.white) // Afficher une icône de sélection
+                          : null,
+                    ),
+                  ),
                 ),
-                Container(
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      // Réinitialiser la sélection du bloc si une étoile est sélectionnée
+                      _selectedBlock = null;
 
-                  width: 140,
-                  height: 70,
-                  color: Colors.red,
-                )
+                      _selectedStar = 2; // Marquer le deuxième container comme sélectionné
+                    });
+                  },
+                  child: Container(
+                    width: 140,
+                    height: 70,
+                    color: _selectedStar == 2 ? Colors.redAccent : Colors.red,
+                    // Changer la couleur en fonction de la sélection
+                    child: Center(
+                      child: _selectedStar == 2
+                          ? Icon(Icons.check, color: Colors.white) // Afficher une icône de sélection
+                          : null,
+                    ),
+                  ),
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
+
 
   Widget _palleteGame() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 6, // Par exemple, 6 colonnes
+          crossAxisCount: 6,
         ),
         itemCount: _instructions.length,
         itemBuilder: (context, index) {
           final instruction = _instructions[index];
-          final isHighlighted =
-              _highlightedBlocks.contains(instruction["bloc"]);
+          final isSelected = _selectedBlock == instruction["bloc"];
 
-          return Container(
-            margin: EdgeInsets.all(2.0),
-            decoration: BoxDecoration(
-              color: instruction["color"],
-              borderRadius: BorderRadius.circular(4.0),
-             // border: isHighlighted
-               //   ? Border.all(
-                   //   color: Colors.green,
-                 //     width: 4.0,
-                //    )
-                //  : null,
+          return GestureDetector(
+            onTap: () => _onBlocSelected(instruction["bloc"]),
+            child: Container(
+              margin: EdgeInsets.all(2.0),
+              decoration: BoxDecoration(
+                color: instruction["color"],
+                borderRadius: BorderRadius.circular(4.0),
+                border: isSelected
+                    ? Border.all(
+                        color: Colors.green,
+                        width: 4.0,
+                      )
+                    : null,
+              ),
+              child: Center(
+                child:
+                    isSelected ? Icon(Icons.check, color: Colors.white) : null,
+              ),
             ),
-           // child: isHighlighted
-           //     ? Icon(
-            //        Icons.ac_unit_outlined,
-              //     color: Colors
-                 //       .white, // Vous pouvez personnaliser la couleur de l'icône ici
-              //    )
-            //    : null, // Ou SizedBox() si vous voulez un widget vide quand ce n'est pas mis en évidence
           );
         },
       ),
-    );
-  }
-
-  Widget _imageGrid() {
-    return ListView.builder(
-      itemCount: _instructions.length,
-      itemBuilder: (context, index) {
-        final instruction = _instructions[index];
-
-        return ListTile(
-          leading: Image.network(instruction["image"], width: 50, height: 50),
-          // Affichage de l'image
-          title: Text(instruction["instruction"]),
-        );
-      },
     );
   }
 
@@ -702,7 +880,7 @@ class _IntroPageState extends State<IntroPage> {
         children: [
           ElevatedButton(
             onPressed: () {
-              _outgame();
+              _previousInstruction();
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red,
@@ -713,7 +891,7 @@ class _IntroPageState extends State<IntroPage> {
             child: Padding(
               padding: const EdgeInsets.all(15.0),
               child: Icon(
-                Icons.output_sharp,
+                Icons.arrow_back,
                 color: Colors.white,
               ),
             ),

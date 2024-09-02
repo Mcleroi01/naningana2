@@ -20,8 +20,8 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     FirestoreService fire = FirestoreService();
-    var myStore = fire.readData();
-    var myva = fire.updateField();
+    //var myStore = fire.readData();
+    var myva = fire.checkValue();
     return Scaffold(
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),

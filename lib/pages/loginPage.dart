@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     }on FirebaseAuthException catch(e){
       Navigator.pop(context);
-      displayMessage("Email ou mot de passe incorrect", context);
+      handleAuthError(e, context);
     }
 
 

@@ -55,11 +55,10 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       }on FirebaseAuthMultiFactorException catch(e){
         Navigator.pop(context);
-        displayMessage("remplissez correctement tous les champs", context);
+        handleAuthError(e, context);
       }
     }
   }
-
 
   void _submitForm() {
     if (_myFormKey.currentState!.validate()) {

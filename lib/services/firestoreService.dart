@@ -26,10 +26,12 @@ class FirestoreService {
 
   updateField()async{
     try{
-      DocumentReference docRef = fire.collection('users').doc(currentUser!.email);
+      var data = await fire.collection("users").get();
+      var user = data.docs[0];
+      DocumentReference docRef = fire.collection('users').doc(user["isVerified"]);
       await docRef.update({'isVerified' : true,});
     }catch(e){
-      print('Erreur de lis à jour ${e.toString()}');
+      print('Erreur de mise à jour ${e.toString()}');
     }
   }
 
@@ -91,4 +93,7 @@ class FirestoreService {
   //     }
   //   return false;
   // }
+
+
+
  }

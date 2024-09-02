@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:naningana/services/firestoreService.dart';
 
 void main() {
@@ -26,7 +27,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
   bool isValidateVisible = false;
   bool isButtonVisible = true;
   FirestoreService fire = FirestoreService();
-
+  // GetStorage stockage = GetStorage();
   final List<Map<String, dynamic>> questions = [
     {
       "label": "Santé physique",
@@ -128,6 +129,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
       // Soumettre les réponses ou naviguer vers une autre page
       setState(() {
         isValidateVisible = true;
+        isButtonVisible = false;
       });
       print("Mes choix____________________________________ $_answers");
     }
@@ -157,179 +159,184 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
 
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(30.0),
+        padding: const EdgeInsets.all(8.0),
         child: Center(
           child: Card(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const Center(
-                          child: Text("Veuillez remplir",
-                            style: TextStyle(
-                                color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold
-                            ),),
-                        ),
-                        const Center(
-                          child: Text("le fiche de suivi ci-dessous",
-                            style: TextStyle(
-                                color: Colors.black,fontSize: 20,fontWeight: FontWeight.bold
-                            ),),
-                        ),
-                        const SizedBox(height: 50,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    color: Colors.blue
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    color: Colors.green
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                width: 4,
-                                height: 4,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(50.0),
-                                    color: Colors.orangeAccent
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 50,),
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6.0),
-                            color: Colors.blue.withOpacity(0.1),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const Center(
+                            child: Text("Veuillez répondre aux",
+                              style: TextStyle(
+                                  color: Colors.black,fontSize: 18,fontWeight: FontWeight.bold
+                              ),),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              currentCategory['label'],
-                              style: const TextStyle(fontSize: 18,
-                                  fontWeight: FontWeight.bold,color: Colors.black),
-                            ),
+                          const Center(
+                            child: Text("questions suivantes",
+                              style: TextStyle(
+                                  color: Colors.black,fontSize: 18,fontWeight: FontWeight.bold
+                              ),),
                           ),
-                        ),
-                        const SizedBox(height: 28),
-                        Text(
-                          currentQuestion['question'],
-                          style: const TextStyle(fontSize: 18,color: Colors.black),
-                        ),
-                        const SizedBox(height: 18),
-                        ...List<String>.from(currentQuestion['assertions']).map((assertion) {
-                          return Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(4.0),
-                            ),
-                            child: RadioListTile(
-                              title: Text(assertion,
-                                style: const TextStyle(
-                                    color: Colors.black
-                                ),),
-                              value: assertion,
-                              groupValue: _answers[currentQuestion['question']],
-                              onChanged: (value) {
-                                setState(() {
-                                  _answers[currentQuestion['question']] = value;
-                                });
-                              },
-                            ),
-                          );
-                        }).toList(),
-
-                        const SizedBox(height: 50,),
-
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Visibility(
-                              visible: isButtonVisible,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.orangeAccent,
-                                  foregroundColor: Colors.white,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                          const SizedBox(height: 50,),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 4,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      color: Colors.blue
+                                  ),
                                 ),
-                                onPressed: _previousQuestion,
-                                child: const Text("Retour",
-                                    style: TextStyle(
-                                        fontSize: 16
-                                    )),
                               ),
-                            ),
-                            Visibility(
-                              visible: isButtonVisible,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  foregroundColor: Colors.white,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 4,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      color: Colors.green
+                                  ),
                                 ),
-                                onPressed: _nextQuestion,
-                                child: const Text("Suivant",style: TextStyle(
-                                    fontSize: 16
-                                ),),
                               ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  width: 4,
+                                  height: 4,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(50.0),
+                                      color: Colors.orangeAccent
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 50,),
+                          Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6.0),
+                              color: Colors.blue.withOpacity(0.1),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 15,),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Visibility(
-                            visible: isValidateVisible,
                             child: Padding(
-                              padding: const EdgeInsets.all(30.0),
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.blue,
-                                  foregroundColor: Colors.white,
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                                ),
-                                onPressed: (){
-                                  fire.createFiche(_answers);
-                                  Navigator.pushNamed(context, '/intro_page');
-                                  fire.getDocumentIds();
-                                },
-                                child: const Text("Envoyer les résultats",style: TextStyle(
-                                    fontSize: 16
-                                ),),
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                currentCategory['label'],
+                                style: const TextStyle(fontSize: 16,
+                                    fontWeight: FontWeight.bold,color: Colors.black),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
+                          const SizedBox(height: 35),
+                          Text(
+                            currentQuestion['question'],
+                            style: const TextStyle(fontSize: 18,color: Colors.black),
+                          ),
+                          const SizedBox(height: 18),
+                          ...List<String>.from(currentQuestion['assertions']).map((assertion) {
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0),
+                              ),
+                              child: RadioListTile(
+                                title: Text(assertion,
+                                  style: const TextStyle(
+                                      color: Colors.black
+                                  ),),
+                                value: assertion,
+                                groupValue: _answers[currentQuestion['question']],
+                                onChanged: (value) {
+                                  setState(() {
+                                    _answers[currentQuestion['question']] = value;
+                                  });
+                                },
+                              ),
+                            );
+                          }).toList(),
+
+                          const SizedBox(height: 50,),
+
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              Visibility(
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.orangeAccent,
+                                    foregroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                  ),
+                                  onPressed: _previousQuestion,
+                                  child: const Text("Retour",
+                                      style: TextStyle(
+                                          fontSize: 16
+                                      )),
+                                ),
+                              ),
+                              Visibility(
+                                visible: isButtonVisible,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                  ),
+                                  onPressed: (){
+                                    _nextQuestion();
+                                  },
+                                  child: const Text("Suivant",style: TextStyle(
+                                      fontSize: 16
+                                  ),),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 15,),
+                          SizedBox(
+                            width: double.infinity,
+                            child: Visibility(
+                              visible: isValidateVisible,
+                              child: Padding(
+                                padding: const EdgeInsets.all(30.0),
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                                  ),
+                                  onPressed: (){
+                                    // await stockage.write("PASSENGER",{"user":"${fire.currentUser?.email}"});
+                                    fire.writeData("${fire.currentUser?.email}");
+                                    fire.createFiche(_answers);
+                                    fire.updateField();
+                                    Navigator.pushNamed(context, '/home_page');
+                                  },
+                                  child: const Text("Envoyer les résultats",style: TextStyle(
+                                      fontSize: 16
+                                  ),),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),

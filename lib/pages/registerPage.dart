@@ -24,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController guideNumberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  bool _isSecret = true;
 
   void register() async{
     //show loading circle
@@ -125,7 +126,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       MyTextField(
                           hintText: "mot de passe",
-                          obscureText: true,
+                          obscureText: _isSecret,
+                          suffixIcon:    InkWell(
+                            onTap: ()=>setState(() {
+                              _isSecret = !_isSecret;
+                            }),
+                            child: Icon(_isSecret ? Icons.visibility : Icons.visibility_off),
+                          ),
                           controller: passwordController),
                       const SizedBox(height: 12,),
 
@@ -151,22 +158,23 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       MyButton(
                           onTap: _submitForm,
-                          text: "register"),
+                          text: "Valider"),
 
 
                       const SizedBox(height: 25,),
 
 
-                      Row(
+                      Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("Already have an account?",
+                          Text("Vous avez séjà un compte ?",
                             style: TextStyle(
                                 color: Theme.of(context).colorScheme.inversePrimary
                             ),),
+                          const SizedBox(height: 15.0,),
                           GestureDetector(
                             onTap: widget.onTap,
-                            child: const Text("  Login here",
+                            child: const Text("  Cliquez ici",
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold

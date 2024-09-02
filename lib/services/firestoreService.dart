@@ -7,14 +7,14 @@ class FirestoreService {
   GetStorage storage = GetStorage();
   final fire = FirebaseFirestore.instance;
   User? currentUser = FirebaseAuth.instance.currentUser;
-  create(String? email, String name, String guideName, String guidePhone){
+  create(String? email, String name, String guideName, String guidePhone, Map<String, dynamic>? data){
     try{
       fire.collection("users").add({
         'email': email,
         'name' : name,
         'guideName' : guideName,
         'guidePhone' : guidePhone,
-        'isVerified' : false,
+        'questionnaire' : data,
         'timestamp' : Timestamp.now(),
       });
     }catch(e){
@@ -24,30 +24,11 @@ class FirestoreService {
     }
   }
 
-  updateField()async{
-    try{
-      var data = await fire.collection("users").get();
-      var user = data.docs[0];
-      DocumentReference docRef = fire.collection('users').doc(user["isVerified"]);
-      await docRef.update({'isVerified' : true,});
-    }catch(e){
-      print('Erreur de mise à jour ${e.toString()}');
-    }
-  }
 
-  checkValue() async{
-    try{
-      DocumentReference docRef = fire.collection('users').doc(currentUser!.email);
-      DocumentSnapshot docSnap= await docRef.get();
-      if(docSnap.exists){
-        var field = docSnap.get('isVerified');
-        if(field == true){
-          return true;
-        }
-      }
-    }catch(e){
-     print("Le document n'éxiste pas") ;
-    }
+  Stream<QuerySnapshot> getUser(){
+    final noteStream = fire.collection("users");
+    final str = noteStream.orderBy("timestamp",descending: true).snapshots();
+    return str;
   }
 
   createFiche(Map<String, dynamic> data){
@@ -62,38 +43,18 @@ class FirestoreService {
       }
     }
   }
-  // Future<String?>getEmailField() async {
-  //   String v = "";
-  //     final data = await fire.collection('usersFiches').get();
-  //     for (int i=0; i<= data.size; i++) {
-  //       if(data.docs[i]["email"] == currentUser?.email ){
-  //         v = "${data.docs[i]["email"]}";
-  //       }
-  //       else{
-  //         return null;
-  //       }
-  //
-  //     }
-  //     return v;
-  //   }
 
-  Future<Map<String, dynamic>>? readData() async{
-    var data = await storage.read("PASSENGER");
+  Map<String, dynamic>? readData(){
+    var data =  storage.read("PASSENGER");
     print("_________________READ____________________________${data}");
     return data;
   }
 
-  void writeData(String data) async{
-    await storage.write("PASSENGER",{"user":data});
-    print("___________________WRITE__________________________${data}");
+  void writeData(Map<String, dynamic>? data) async{
+    await storage.write("PASSENGER",data);
   }
-  // Future<String>getDocumentField(String fieldName) async {
-  //     if(fieldName == currentUser!.email){
-  //       return true;
-  //     }
-  //   return false;
-  // }
 
-
-
+  void removeData() async{
+    await storage.remove("PASSENGER");
+  }
  }

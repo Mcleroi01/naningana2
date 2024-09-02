@@ -43,15 +43,16 @@ class _RegisterPageState extends State<RegisterPage> {
         UserCredential? userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text, password: passwordController.text,);
 
-        //create user and add to database
-        await fire.create(userCredential.user!.email,
-            nameController.text,
-            guideNameController.text,
-            guideNumberController.text);
+          fire.writeData({
+            'email': userCredential.user!.email,
+            'name' : nameController.text,
+            'guideName' : guideNameController.text,
+            'guidePhone' : guideNumberController.text,
+          });
 
         if(context.mounted) {
           Navigator.pop(context);
-          afficherMessageInfo(context, "Bienvenue!", Colors.green);
+          Navigator.pushNamed(context, '/fiche_page');
         }
       }on FirebaseAuthMultiFactorException catch(e){
         Navigator.pop(context);

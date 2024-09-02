@@ -14,30 +14,21 @@ class AuthPage extends StatefulWidget {
 
 
 class _AuthPageState extends State<AuthPage> {
-  bool? m;
+  FirestoreService fire = FirestoreService();
+
+  Map<String, dynamic>? mys;
 
 
   @override
   Widget build(BuildContext context) {
     FirestoreService fire = FirestoreService();
-    //var myStore = fire.readData();
-    var myva = fire.checkValue();
     return Scaffold(
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot){
+        builder: (context, snapshot) {
 
           if(snapshot.hasData)
-          {return FicheDeSuivi();}
-          // else if(fire.readData() != null){
-          //   return HomePage();
-          // }
-       //    else if(myStore != null){
-       //     return const HomePage();
-       // }
-          else if(myva == true){
-            return const HomePage();
-          }
+          {return HomePage();}
           else{
             return const LoginOrRegister();
           }

@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:naningana/components/afficherMessageInfo.dart';
 import 'package:naningana/services/firestoreService.dart';
 
 void main() {
@@ -115,7 +118,11 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
     },
   ];
 
-  void _nextQuestion() {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+  void _nextQuestio() {
     if (_currentQuestionIndex < _getCurrentQuestions().length - 1) {
       setState(() {
         _currentQuestionIndex++;
@@ -135,6 +142,56 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
     }
   }
 
+
+
+  void _nextQuestion() {
+    var currentQuestion = _getCurrentQuestions()[_currentQuestionIndex];
+
+    // Vérifier si une réponse a été sélectionnée
+    if (_answers[currentQuestion['question']] == null) {
+      // Afficher un message d'alerte si aucune réponse n'est sélectionnée
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Réponse requise"),
+            content: Text("Veuillez répondre à la question avant de continuer."),
+            actions: [
+              TextButton(
+                child: Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Passer à la question suivante ou à la catégorie suivante
+      if (_currentQuestionIndex < _getCurrentQuestions().length - 1) {
+        setState(() {
+          _currentQuestionIndex++;
+        });
+      } else if (_currentCategoryIndex < questions.length - 1) {
+        setState(() {
+          _currentCategoryIndex++;
+          _currentQuestionIndex = 0; // Réinitialiser à la première question de la nouvelle catégorie
+        });
+      } else {
+        // Soumettre les réponses ou naviguer vers une autre page
+        setState(() {
+          isValidateVisible = true;
+          isButtonVisible = false;
+        });
+        print("Mes choix____________________________________ $_answers");
+      }
+    }
+  }
+
+
+
+
   void _previousQuestion() {
     if (_currentQuestionIndex > 0) {
       setState(() {
@@ -150,6 +207,41 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
 
   List<dynamic> _getCurrentQuestions() {
     return questions[_currentCategoryIndex]['questions'];
+  }
+
+  Future<void> updateIt(String docId, String fieldName, bool newValue) async {
+    try {
+      await _firestore.collection('your_collection').doc(docId).update({
+        fieldName: newValue,
+      });
+      print('Champ mis à jour avec succès');
+    } catch (e) {
+      print('Erreur lors de la mise à jour: ${e.toString()}');
+    }
+  }
+
+  String? userId;
+  String? documentId;
+
+  @override
+  void initState() {
+    super.initState();
+    _getCurrentUserDocumentId();
+  }
+
+
+  Future<void> _getCurrentUserDocumentId() async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      userId = user.uid;
+      // Remplacez 'users' par le nom de votre collection
+      QuerySnapshot snapshot = await _firestore.collection('users').where('uid', isEqualTo: userId).get();
+      if (snapshot.docs.isNotEmpty) {
+        setState(() {
+          documentId = snapshot.docs.first.id; // Récupère l'ID du premier document trouvé
+        });
+      }
+    }
   }
 
   @override
@@ -271,6 +363,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               Visibility(
+                                visible: isButtonVisible,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.orangeAccent,
@@ -319,11 +412,18 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                                         borderRadius: BorderRadius.all(Radius.circular(5.0))),
                                   ),
                                   onPressed: (){
-                                    // await stockage.write("PASSENGER",{"user":"${fire.currentUser?.email}"});
-                                    fire.writeData("${fire.currentUser?.email}");
-                                    fire.createFiche(_answers);
-                                    fire.updateField();
-                                    Navigator.pushNamed(context, '/home_page');
+                                    var myData =  fire.readData();
+                                    if(myData!.isNotEmpty){
+                                      fire.create(
+                                          myData["email"], myData["name"], myData["guideName"], myData["guidePhone"], _answers
+                                      );
+                                      Navigator.pushNamed(context, '/home_page');
+                                      afficherMessageInfo(context, "Bienvenu sur na ningana !", Colors.yellow, Colors.black);
+                                    }
+                                    else{
+                                      Navigator.pushNamed(context, '/fiche_page');
+                                    }
+
                                   },
                                   child: const Text("Envoyer les résultats",style: TextStyle(
                                       fontSize: 16

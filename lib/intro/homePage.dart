@@ -30,13 +30,14 @@ class HomePage extends StatelessWidget {
                 child: TextButton(
                 onPressed: (){
                   fire.logout();
+                  Navigator.pushNamed(context, '/login_register');
                         },
-                child: Text("se deconnecter",
+                child: const Text("se deconnecter",
                 style: TextStyle(
                   color: Colors.white
                 ),)),
               ),
-              SizedBox(height: 80,),
+              const SizedBox(height: 80,),
               Container(
                 width: 200,
                 height: 200,

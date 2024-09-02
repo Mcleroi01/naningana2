@@ -8,6 +8,7 @@ class MyTextField extends StatefulWidget {
   final TextInputType? keyboardType;
   final Widget? prefixIcon;
   final void Function(String)? onChanged;
+  final Widget? suffixIcon;
   const MyTextField({super.key,
     required this.hintText,
     required this.obscureText,
@@ -15,7 +16,8 @@ class MyTextField extends StatefulWidget {
   this.keyboardType,
   this.prefixIcon,
   this.errorText,
-  this.onChanged});
+  this.onChanged,
+  this.suffixIcon});
 
   @override
   State<MyTextField> createState() => _MyTextFieldState();
@@ -42,6 +44,7 @@ class _MyTextFieldState extends State<MyTextField> {
       obscureText: widget.obscureText,
       controller: widget.controller,
       decoration: InputDecoration(
+        suffixIcon: widget.suffixIcon,
         errorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: Colors.red.shade100, width: 2),
         ),

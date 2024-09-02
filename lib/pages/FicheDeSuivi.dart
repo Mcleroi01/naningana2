@@ -27,7 +27,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
   bool isValidateVisible = false;
   bool isButtonVisible = true;
   FirestoreService fire = FirestoreService();
-  GetStorage stockage = GetStorage();
+  // GetStorage stockage = GetStorage();
   final List<Map<String, dynamic>> questions = [
     {
       "label": "Santé physique",
@@ -318,11 +318,12 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                                     shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(Radius.circular(5.0))),
                                   ),
-                                  onPressed: ()async{
-                                    await stockage.write("PASSENGER",{"user":"${fire.currentUser?.email}"});
+                                  onPressed: (){
+                                    // await stockage.write("PASSENGER",{"user":"${fire.currentUser?.email}"});
+                                    fire.writeData("${fire.currentUser?.email}");
                                     fire.createFiche(_answers);
+                                    fire.updateField();
                                     Navigator.pushNamed(context, '/home_page');
-                                    fire.readData();
                                   },
                                   child: const Text("Envoyer les résultats",style: TextStyle(
                                       fontSize: 16

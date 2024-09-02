@@ -17,6 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isSecret = true;
 
   void login() async{
     showDialog(
@@ -94,10 +95,14 @@ class _LoginPageState extends State<LoginPage> {
                           controller: emailController),
                       const SizedBox(height: 10,),
                       MyTextField(
-                          prefixIcon: const Icon(Icons.lock,
-                            color: Colors.black,),
+                          obscureText: _isSecret,
+                          suffixIcon:    InkWell(
+                            onTap: ()=>setState(() {
+                              _isSecret = !_isSecret;
+                            }),
+                            child: Icon(_isSecret ? Icons.visibility : Icons.visibility_off),
+                          ),
                           hintText: "mot de passe",
-                          obscureText: true,
                           controller: passwordController),
                       const SizedBox(height: 18,),
                       Row(

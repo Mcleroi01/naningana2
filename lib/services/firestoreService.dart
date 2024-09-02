@@ -14,6 +14,7 @@ class FirestoreService {
         'name' : name,
         'guideName' : guideName,
         'guidePhone' : guidePhone,
+        'isVerified' : false,
         'timestamp' : Timestamp.now(),
       });
     }catch(e){
@@ -22,6 +23,31 @@ class FirestoreService {
       }
     }
   }
+
+  updateField()async{
+    try{
+      DocumentReference docRef = fire.collection('users').doc(currentUser!.email);
+      await docRef.update({'isVerified' : true,});
+    }catch(e){
+      print('Erreur de lis à jour ${e.toString()}');
+    }
+  }
+
+  checkValue() async{
+    try{
+      DocumentReference docRef = fire.collection('users').doc(currentUser!.email);
+      DocumentSnapshot docSnap= await docRef.get();
+      if(docSnap.exists){
+        var field = docSnap.get('isVerified');
+        if(field == true){
+          return true;
+        }
+      }
+    }catch(e){
+     print("Le document n'éxiste pas") ;
+    }
+  }
+
   createFiche(Map<String, dynamic> data){
     try{
 
@@ -49,12 +75,16 @@ class FirestoreService {
   //     return v;
   //   }
 
-  Future<Map<String, dynamic>?> readData() async{
+  Future<Map<String, dynamic>>? readData() async{
     var data = await storage.read("PASSENGER");
-    print("_____________________________________________${data}");
+    print("_________________READ____________________________${data}");
     return data;
   }
 
+  void writeData(String data) async{
+    await storage.write("PASSENGER",{"user":data});
+    print("___________________WRITE__________________________${data}");
+  }
   // Future<String>getDocumentField(String fieldName) async {
   //     if(fieldName == currentUser!.email){
   //       return true;

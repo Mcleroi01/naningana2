@@ -24,6 +24,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final TextEditingController guideNumberController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController = TextEditingController();
+  bool _isSecret = true;
 
   void register() async{
     //show loading circle
@@ -125,7 +126,13 @@ class _RegisterPageState extends State<RegisterPage> {
 
                       MyTextField(
                           hintText: "mot de passe",
-                          obscureText: true,
+                          obscureText: _isSecret,
+                          suffixIcon:    InkWell(
+                            onTap: ()=>setState(() {
+                              _isSecret = !_isSecret;
+                            }),
+                            child: Icon(_isSecret ? Icons.visibility : Icons.visibility_off),
+                          ),
                           controller: passwordController),
                       const SizedBox(height: 12,),
 

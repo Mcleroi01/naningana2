@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:naningana/intro/homePage.dart';
 import 'package:naningana/pages/FicheDeSuivi.dart';
 import 'package:naningana/pages/auth/loginOrRegister.dart';
@@ -20,9 +19,9 @@ class _AuthPageState extends State<AuthPage> {
 
   @override
   Widget build(BuildContext context) {
-
-
     FirestoreService fire = FirestoreService();
+    var myStore = fire.readData();
+    var myva = fire.updateField();
     return Scaffold(
       body: StreamBuilder(
         stream: FirebaseAuth.instance.authStateChanges(),
@@ -30,8 +29,14 @@ class _AuthPageState extends State<AuthPage> {
 
           if(snapshot.hasData)
           {return FicheDeSuivi();}
-          else if(fire.readData() != null){
-            return HomePage();
+          // else if(fire.readData() != null){
+          //   return HomePage();
+          // }
+       //    else if(myStore != null){
+       //     return const HomePage();
+       // }
+          else if(myva == true){
+            return const HomePage();
           }
           else{
             return const LoginOrRegister();

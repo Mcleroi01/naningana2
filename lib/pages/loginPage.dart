@@ -128,10 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                             color: Theme.of(context).colorScheme.inversePrimary
                           ),),
                           const SizedBox(height: 15.0,),
-                          TextButton(
-                            onPressed: (){
-                              Navigator.pushNamed(context, "/home_page");
-                            },
+                          GestureDetector(
+                            onTap: widget.onTap,
                             child: const Text("  Cliquez ici",
                             style: TextStyle(
                               fontSize: 16,

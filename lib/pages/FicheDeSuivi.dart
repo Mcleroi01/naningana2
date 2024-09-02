@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:delayed_display/delayed_display.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -118,6 +119,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
     },
   ];
 
+  final Duration initialDelay = Duration(seconds: 1);
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -154,8 +156,13 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Réponse requise"),
-            content: Text("Veuillez répondre à la question avant de continuer."),
+            title: const Text("Réponse requise",style: TextStyle(
+              color: Colors.blue,
+            ),),
+            content: const Text("Veuillez répondre à la question avant de continuer.",
+            style: TextStyle(
+              color: Colors.black
+            ),),
             actions: [
               TextButton(
                 child: Text("OK"),
@@ -191,7 +198,6 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
 
 
 
-
   void _previousQuestion() {
     if (_currentQuestionIndex > 0) {
       setState(() {
@@ -209,40 +215,6 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
     return questions[_currentCategoryIndex]['questions'];
   }
 
-  Future<void> updateIt(String docId, String fieldName, bool newValue) async {
-    try {
-      await _firestore.collection('your_collection').doc(docId).update({
-        fieldName: newValue,
-      });
-      print('Champ mis à jour avec succès');
-    } catch (e) {
-      print('Erreur lors de la mise à jour: ${e.toString()}');
-    }
-  }
-
-  String? userId;
-  String? documentId;
-
-  @override
-  void initState() {
-    super.initState();
-    _getCurrentUserDocumentId();
-  }
-
-
-  Future<void> _getCurrentUserDocumentId() async {
-    User? user = _auth.currentUser;
-    if (user != null) {
-      userId = user.uid;
-      // Remplacez 'users' par le nom de votre collection
-      QuerySnapshot snapshot = await _firestore.collection('users').where('uid', isEqualTo: userId).get();
-      if (snapshot.docs.isNotEmpty) {
-        setState(() {
-          documentId = snapshot.docs.first.id; // Récupère l'ID du premier document trouvé
-        });
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -281,7 +253,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Container(
                                   width: 4,
                                   height: 4,
@@ -292,7 +264,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Container(
                                   width: 4,
                                   height: 4,
@@ -303,7 +275,7 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding: const EdgeInsets.all(4.0),
                                 child: Container(
                                   width: 4,
                                   height: 4,
@@ -331,28 +303,34 @@ class _FicheDeSuiviState extends State<FicheDeSuivi> {
                             ),
                           ),
                           const SizedBox(height: 35),
-                          Text(
-                            currentQuestion['question'],
-                            style: const TextStyle(fontSize: 18,color: Colors.black),
+                          DelayedDisplay(
+                            delay: initialDelay,
+                            child: Text(
+                              currentQuestion['question'],
+                              style: const TextStyle(fontSize: 18,color: Colors.black),
+                            ),
                           ),
                           const SizedBox(height: 18),
                           ...List<String>.from(currentQuestion['assertions']).map((assertion) {
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                              child: RadioListTile(
-                                title: Text(assertion,
-                                  style: const TextStyle(
-                                      color: Colors.black
-                                  ),),
-                                value: assertion,
-                                groupValue: _answers[currentQuestion['question']],
-                                onChanged: (value) {
-                                  setState(() {
-                                    _answers[currentQuestion['question']] = value;
-                                  });
-                                },
+                            return DelayedDisplay(
+                              delay: initialDelay,
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4.0),
+                                ),
+                                child: RadioListTile(
+                                  title: Text(assertion,
+                                    style: const TextStyle(
+                                        color: Colors.black
+                                    ),),
+                                  value: assertion,
+                                  groupValue: _answers[currentQuestion['question']],
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _answers[currentQuestion['question']] = value;
+                                    });
+                                  },
+                                ),
                               ),
                             );
                           }).toList(),

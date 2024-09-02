@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:naningana/services/firestoreService.dart';
 
 
 class HomePage extends StatelessWidget {
@@ -8,11 +9,11 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirestoreService fire = FirestoreService();
     return Scaffold(
-
       body: Container(
         width: 500,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.black12,
           image: DecorationImage(
             image: NetworkImage(
@@ -25,14 +26,25 @@ class HomePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Center(
+                child: TextButton(
+                onPressed: (){
+                  fire.logout();
+                        },
+                child: Text("se deconnecter",
+                style: TextStyle(
+                  color: Colors.white
+                ),)),
+              ),
+              SizedBox(height: 80,),
               Container(
                 width: 200,
                 height: 200,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   image: DecorationImage(image: AssetImage('assets/images/logo.png'))
                 ),
               ),
-              Text("Naningana",
+              const Text("Naningana",
               style: TextStyle(
                 fontSize: 50,
                 color: Colors.black,
@@ -58,7 +70,7 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                       child: Text("Jouer",style: TextStyle(color: Colors.white),)),
-                  SizedBox(width: 20,),
+                  const SizedBox(width: 20,),
                   ElevatedButton(
                       onPressed: () {
                         SystemNavigator.pop();

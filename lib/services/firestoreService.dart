@@ -24,13 +24,6 @@ class FirestoreService {
     }
   }
 
-
-  Stream<QuerySnapshot> getUser(){
-    final noteStream = fire.collection("users");
-    final str = noteStream.orderBy("timestamp",descending: true).snapshots();
-    return str;
-  }
-
   createFiche(Map<String, dynamic> data){
     try{
 
@@ -56,5 +49,9 @@ class FirestoreService {
 
   void removeData() async{
     await storage.remove("PASSENGER");
+  }
+
+  logout(){
+    FirebaseAuth.instance.signOut();
   }
  }

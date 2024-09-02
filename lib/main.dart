@@ -35,7 +35,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: lightMode,
-      darkTheme: darkMode,
+      //darkTheme: darkMode,
       home: const AuthPage(),
       routes: {
         '/intro_page' : (context)=>const Naninganapage(),

@@ -33,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
           email: emailController.text,
           password: passwordController.text);
       if(context.mounted) {
-        Navigator.pop(context);
+        Navigator.pushNamed(context, "/home_page");
         afficherMessageInfo(context, "Connecté en tant que : ${emailController.text}", Colors.green, Colors.white);
       }
     }on FirebaseAuthException catch(e){
@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       const SizedBox(height: 35,),
-                      const Text("Connectez-vous à votre ccmpte",
+                      const Text("Connectez-vous à votre compte",
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -114,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                       const SizedBox(height: 12,),
+
                       MyButton(
                           onTap: login, text: "Se connecter"),
                       const SizedBox(height: 25,),
@@ -127,8 +128,10 @@ class _LoginPageState extends State<LoginPage> {
                             color: Theme.of(context).colorScheme.inversePrimary
                           ),),
                           const SizedBox(height: 15.0,),
-                          GestureDetector(
-                            onTap: widget.onTap,
+                          TextButton(
+                            onPressed: (){
+                              Navigator.pushNamed(context, "/home_page");
+                            },
                             child: const Text("  Cliquez ici",
                             style: TextStyle(
                               fontSize: 16,

@@ -38,4 +38,6 @@ void handleAuthError(FirebaseAuthException e, BuildContext context) {
     default:
       displayMessage("Erreur d'authentification : ${e.message}", context);
   }
+
+
 }

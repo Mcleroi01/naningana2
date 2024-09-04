@@ -66,6 +66,22 @@ class _RegisterPageState extends State<RegisterPage> {
      register();
     }
   }
+  bool isValidEmail(String email) {
+    // Expression régulière pour valider une adresse e-mail
+    final RegExp emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email);
+  }
+
+// Exemple d'utilisation
+  void validateEmail(String email) {
+    if (isValidEmail(email)) {
+      return null;
+    } else {
+      afficherMessageInfo(context, "Adresse e-mail invalide.", Colors.redAccent, Colors.white,);
+    }
+  }
 
 
 
@@ -160,7 +176,10 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(height: 25,),
 
                       MyButton(
-                          onTap: _submitForm,
+                          onTap: (){
+                            _submitForm();
+                            validateEmail(emailController.text);
+                          },
                           text: "Valider"),
 
 

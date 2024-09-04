@@ -77,17 +77,20 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 35,),
                       const Text("Connectez-vous à votre compte",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),),
                       const Text("pour commencer",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 20
                         ),),
                       const SizedBox(height: 60,),
                       //email
                       MyTextField(
+                        keyboardType: TextInputType.emailAddress,
                         prefixIcon: const Icon(Icons.email,
                         color: Colors.black,),
                           hintText: "email",

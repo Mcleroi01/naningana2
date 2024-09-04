@@ -7,6 +7,7 @@ class FirestoreService {
   GetStorage storage = GetStorage();
   final fire = FirebaseFirestore.instance;
   User? currentUser = FirebaseAuth.instance.currentUser;
+
   create(String? email, String name, String guideName, String guidePhone, Map<String, dynamic>? data){
     try{
       fire.collection("users").add({
@@ -24,6 +25,9 @@ class FirestoreService {
     }
   }
 
+  getEmail(){
+    return currentUser!.email;
+  }
   createFiche(Map<String, dynamic> data){
     try{
 

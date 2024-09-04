@@ -102,17 +102,20 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                       const SizedBox(height: 15,),
                       const Text("Créer un compte",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),),
                       const Text("Veuillez remplir les champs ci-dessous",
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 20
                         ),),
                       const SizedBox(height: 60,),
                       //email
                       MyTextField(
+                        keyboardType: TextInputType.emailAddress,
                           hintText: "email",
                           obscureText: false,
                           controller: emailController),

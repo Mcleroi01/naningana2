@@ -5,6 +5,8 @@ import 'package:naningana/pages/FicheDeSuivi.dart';
 import 'package:naningana/pages/auth/loginOrRegister.dart';
 import 'package:naningana/services/firestoreService.dart';
 
+import '../../user/userProfile.dart';
+
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
 
@@ -24,15 +26,15 @@ class _AuthPageState extends State<AuthPage> {
     FirestoreService fire = FirestoreService();
     return Scaffold(
       body: StreamBuilder(
-        stream: FirebaseAuth.instance.authStateChanges(),
-        builder: (context, snapshot) {
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, snapshot) {
 
-          if(snapshot.hasData)
-          {return HomePage();}
-          else{
-            return const LoginOrRegister();
+            if(snapshot.hasData)
+            {return UserProfile();}
+            else{
+              return const LoginOrRegister();
+            }
           }
-        }
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:naningana/configure_nonweb.dart';
 import 'package:naningana/gameNaningana/IntroPage.dart';
 import 'package:naningana/pages/FicheDeSuivi.dart';
 import 'package:naningana/pages/auth/AuthPage.dart';
@@ -14,18 +15,26 @@ import 'package:naningana/theme/lightMode.dart';
 import 'firebase_options.dart';
 import 'intro/homePage.dart';
 
-void main() async{
+void main() async {
+  // Assurez-vous que les widgets sont initialisés avant d'utiliser Firebase
   WidgetsFlutterBinding.ensureInitialized();
+  // Configurer l'application (si nécessaire)
+  //configureApp();
+  // Initialiser Firebase
   await Firebase.initializeApp(
-    name: "naningana-mobile-project",
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  // Initialiser GetStorage
   await GetStorage.init();
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // Préserver le splash screen pendant le démarrage
+  FlutterNativeSplash.preserve(widgetsBinding: WidgetsBinding.instance);
+  // Exécuter l'application
   runApp(MyApp());
+  // Supprimer le splash screen après le démarrage de l'application
   FlutterNativeSplash.remove();
 }
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

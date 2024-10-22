@@ -44,5 +44,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-.env
+functions/.env
 pubspec.lock
+node_modules
